@@ -11,7 +11,7 @@ export class Prototype {
         this.posthouse = config.posthouse;
         this.debugchannel = config.debugchannel;
         this.config = config;
-        this.color = 0x000000;
+        this.color = 0xd3d2e8;
         this.discordClient = new Client({
             intents: [
                 GatewayIntentBits.Guilds,
@@ -66,20 +66,23 @@ export class Prototype {
         const latestVersion = Object.keys(versionList)[Object.keys(versionList).length - 1];
         const attributions = [
             'Art components - Arknights《明日方舟》',
+            'Arknights Terra Wiki - https://arknights.wiki.gg/',
+            'Closure Wiki - https://closure.wiki/',
+            'Monster Siren Records - https://monster-siren.hypergryph.com/',
             'discord.js v14'
-        ];
+        ]
         return {
             embeds: [
                 {
                     color: this.color,
                     title: this.name,
                     author: {
-                        name: 'Noel A.',
-                        icon_url: (await this.discordClient.users.fetch('1023608069063717035')).displayAvatarURL({ format: 'png', dynamic: true })
+                        name: 'Estelle Z.',
+                        icon_url: (await this.discordClient.users.fetch('1209318360714715210')).displayAvatarURL({ format: 'png', dynamic: true })
                     },
-                    description: 'Description of the prototype.',
+                    description: 'Provide services regarding Arknights Terra Wiki.',
                     thumbnail: {
-                        url: (await this.discordClient.users.fetch('1023608069063717035')).displayAvatarURL({ format: 'png', dynamic: true })
+                        url: 'https://arknights.wiki.gg/images/7/7e/Ptilopsis_icon.png?4688da',
                     },
                     fields: [
                         {
