@@ -1,0 +1,11 @@
+{
+    "name": "Ptilopsis",
+    "prefix": "!pt",
+    "model": "RK-02",
+    "posthouse": "1408285577958391922",
+    "debugchannel": "1307931811325939722",
+    "office": "1403956635797422131",
+    "versions": {
+        "0.1": "Project initialization."
+    }
+}
