@@ -13,4 +13,4 @@ async function start (option) {
     await prototype.login();
 }
 
-start("test");
+start();
