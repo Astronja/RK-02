@@ -1,6 +1,6 @@
 import { GatewayIntentBits, Client, ActivityType } from "discord.js";
-import { Command } from "./Prototype/command.js";
-import { PRTS } from "./Prototype/prts.js";
+import { Command } from "./Ptilopsis/command.js";
+import { PRTS } from "./Ptilopsis/prts.js";
 
 export class Prototype {
     constructor(config, dctoken) {
