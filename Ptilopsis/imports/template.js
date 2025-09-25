@@ -1,4 +1,4 @@
-import { Edit } from './edit.js';
+//import { Editor } from './edit.js';
 
 export class Event {
     constructor (event_name) {
@@ -32,10 +32,12 @@ export class Event {
 
 export class Operator {
     constructor (names) {
+        /*
         this.cnname = names.cnname;
         this.enname = names.enname;
         this.eventcnname = names.eventcnname;
         this.eventenname = names.eventenname;
+        */
     }
 
 
@@ -43,7 +45,7 @@ export class Operator {
      * @param {object} data 
      */
     intro (data) {
-        const lines = data.text.split("\n");
+        const lines = data.split("\n");
         let isText = false;
         let isQuote = false;
         let text = '';
@@ -74,3 +76,15 @@ export class Music {
         this.type
     }
 }
+
+
+// only for test use
+async function start () {
+    const text = `【新增干员】\n//三角初华\n“你好，我叫三角......初华。欸，小祥已经和你介绍过了？！她、她是怎么介绍我的？”\n\n____________\n欢迎打开梦城堡的大门，这里欢迎每一个烦恼的孩子\n一位善于隐藏情感的少女，梦到自己变成了一名佩洛\n她生活在无名海岛的别墅中\n她最重要的朋友即将从远方归来\n她们约定好了以后一起在这里生活下去\n那么她的愿望，一定会实现吧？\n欢迎来到\n另一个Ave Mujica的世界\n在这里的你，会是怎样一副样貌？`;
+
+    const template = new Operator();
+    const wikitext = template.intro(text);
+    console.log(wikitext);
+}
+
+//start();

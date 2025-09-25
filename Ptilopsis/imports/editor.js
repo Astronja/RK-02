@@ -5,7 +5,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: __dirname + '/.env' });
 
-export class Edit {
+export class Editor {
     constructor () {
         this.baseUrl = 'https://arknights.wiki.gg/api.php';
     }

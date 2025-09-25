@@ -1,27 +1,11 @@
 import fs from 'fs/promises';
 
 export class GetWiki {
-    constructor (command) {
+    constructor () {
         this.url = 'https://arknights.wiki.gg/api.php?';
-        this.command = command.replace('wiki', '').trim();
-    }
-    
-    async process () {
-        console.log(this.command);
-        const commandList = this.command.split(' ');
-        switch (commandList[0]) {
-            case 'wt':
-                return await this.getWT(this.command.replace('wt', '').trim());
-            case 'cm':
-                return await this.listCM(this.command.replace('cm', '').trim());
-            case 'iu':
-                return await this.getIU(this.command.replace('iu', '').trim());
-            case 'itr':
-                return await this.introduction(this.command.replace('itr', '').trim());
-        }
     }
 
-    async getWT (page_name) {
+    async getWikiText (page_name) {
         const params = {
             action: 'parse',
             prop: 'wikitext',
@@ -36,7 +20,7 @@ export class GetWiki {
         }
     }
     
-    async listCM (category_name) {
+    async listCategoryMembers (category_name) {
         if (!category_name.startsWith('Category:')) {
             category_name = 'Category:' + category_name;
         }
@@ -48,20 +32,15 @@ export class GetWiki {
             format: 'json'
         }
         const response = await (await fetch(this.url + new URLSearchParams(params))).json();
+        console.log(this.url + new URLSearchParams(params));
         if (response.error) {
             return response.error.info;
         } else {
-            const json = Buffer.from(JSON.stringify(response.query.categorymembers, null, 2));
-            const path = './data.json';
-            await fs.writeFile(path, json, 'utf8');
-            return {
-                content: `CM of ${category_name}.`,
-                files: [path]
-            };
+            return response.query.categorymembers;
         }
     }
     
-    async getIU (file_name) {
+    async getImageURL (file_name) {
         
         let fn = file_name;
         if (!file_name.startsWith('File:')) {
@@ -83,7 +62,7 @@ export class GetWiki {
         }
     }
 
-    async introduction(page_name) {
+    async getInfo(page_name) {
         const params = {
             action: 'parse',
             page: page_name,
@@ -99,11 +78,20 @@ export class GetWiki {
                 if (item.name == 'description') {
                     result.desc = item['*'];
                 } else if (item.name == 'page_image_free') {
-                    result.thumbnail = await this.getIU(item['*']);
+                    result.thumbnail = await this.getImageURL(item['*']);
                 }
             }
             console.log(result);
             return result;
         }
     }
+}
+
+// For testing use only
+async function test () {
+    const request = new GetWiki();
+    //console.log(await request.getWikiText("Jessica"));
+    //console.log(await request.listCategoryMembers("Untranslated"));
+    //console.log(await request.getImageURL("Jessica_icon.png"));
+    //console.log(await request.getInfo("Jessica"));
 }

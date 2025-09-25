@@ -1,4 +1,4 @@
-export class Msr {
+export class MSR {
     constructor () {
         this.endpoint = 'https://monster-siren.hypergryph.com/api/';
         this.lastAlbumCid = '';

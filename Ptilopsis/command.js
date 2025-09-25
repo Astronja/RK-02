@@ -2,7 +2,7 @@ import { Ping } from './commands/ping.js';
 
 export class Command {
     constructor() {
-        this.name = 'Prototype';
+        this.name = 'Ptilopsis';
         this.version = '1.0.0';
     }
 
