@@ -1,5 +1,3 @@
-import fs from 'fs/promises';
-
 export class GetWiki {
     constructor () {
         this.url = 'https://arknights.wiki.gg/api.php?';

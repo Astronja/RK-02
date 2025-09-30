@@ -20,9 +20,14 @@ export class MSR {
         return await response.json();
     }
 
+    async getSong (cid) {
+        const params = `song/${cid}`;
+        const response = await fetch(this.endpoint + params);
+        return await response.json();
+    }
+
     /**
-     * @returns {object} Returns response from msr.
-     * @returns {object} @param {array} data Includes all albums on msr.
+     * @returns {Promise<object>} Includes all albums on msr.
      */
     async allAlbums () {
         const params = 'albums';
@@ -31,16 +36,8 @@ export class MSR {
     }
 
     async search (string) {
-        const params = `search`;
+        const params = `search?keyword=${encodeURIComponent(string)}`;
+        const response = await fetch(this.endpoint + params);
+        return await response.json();
     }
 }
-
-async function main () {
-    const imp = new Msr();
-    const albs = (await imp.allAlbums()).data;
-    const response = await imp.getAlbum(albs[0].cid);
-    console.log(response.data);
-}
-
-
-main();

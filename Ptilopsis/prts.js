@@ -7,7 +7,10 @@ export class PRTS {
     }
 
     async receive (id, data) {
-        
+        switch (id.replace("RK-02", "")) {
+            case "UPLOAD_OP_INTRO":
+                //upload operator intro
+        }
     }
 
     async dispatch (id, data) {

@@ -1,9 +1,4 @@
-import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import path from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: __dirname + '/.env' });
+import { Source } from '../source.js';
 
 export class Editor {
     constructor () {
@@ -16,7 +11,7 @@ export class Editor {
     * @param {string} source.page_name The name of the page that needs to be modified, the page can be not yet created.
     * @param {string} source.wikitext The wikitext needs to be uploaded to the page
     * @param {string} source.summary The comment you want to leave for this edit, maybe you want to indicate that this is a bot edit.
-    * @returns {object} The edit result rertrieved from the wiki.
+    * @returns {Promise<object>} The edit result rertrieved from the wiki.
     */ 
     async edit (source) {
         try {
@@ -76,29 +71,56 @@ export class Editor {
 
     /**
      * 
-     * @param {string} file_name 
-     * @param {string} fileUrl 
+     * @param {string} file_name The name of the file to be uploaded.
+     * @param {string} file_url The url of a file that is publicly accessible.
      */
-    async upload (file_name, fileUrl) {
+    async upload (file_name, file_url) {
         try {
             await this.login();
+            await this.getCookies();
             const uploadToken = await this.getToken(this.cookies, 'csrf');
             const params = {
                 action: 'upload',
-                format: 'json'
+                format: 'json',
+                filename: file_name,
+                url: file_url,
+                token: uploadToken,
             }
+            const response = await fetch(this.baseUrl + "?", {
+                method: 'POST',
+                body: new URLSearchParams(params),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Cookie': this.cookies,
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+                    'Origin': 'https://arknights.wiki.gg',
+                    'Referer': 'https://arknights.wiki.gg/wiki/Special:Upload',
+                    'Accept': 'application/json, */*',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Sec-Fetch-Dest': 'empty',
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'same-origin'
+                }
+            });
+            const result = await response.json();
+            if (result.upload && result.upload.result === 'Success') {
+                console.log(`Upload successful: ${file_name}`);
+            }
+            return result;
         } catch (err) {
             
         }
     }
 
     async login () {
+        const source = new Source();
         await this.getCookies();
         const loginToken = await this.getToken(this.cookies, 'login');
         const lgParams = new URLSearchParams({
             action: 'login',
-            lgname: process.env.botUser,
-            lgpassword: process.env.botPassword,
+            lgname: source.env("wiki_username"),
+            lgpassword: source.env("wiki_password"),
             lgtoken: loginToken,
             format: 'json'
         });
@@ -191,3 +213,15 @@ export class Editor {
     }
 
 }
+
+//only for test use
+async function test () {
+    const editor = new Editor();
+    await editor.edit({
+        page_name: 'User:Ptilopsis',
+        wikitext: 'Hello world! This is a test edit from Ptilopsis bot.',
+        summary: 'Test edit from Ptilopsis bot'
+    });
+}
+
+//test();

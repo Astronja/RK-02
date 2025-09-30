@@ -3,7 +3,7 @@ import { Ping } from './commands/ping.js';
 export class Command {
     constructor() {
         this.name = 'Ptilopsis';
-        this.version = '1.0.0';
+        this.version = '0.0.1';
     }
 
     async executeCommand(commandName) {
@@ -14,5 +14,9 @@ export class Command {
             default:
                 return `Unknown command: ${commandName}`;
         }
-    } 
+    }
+
+    async uploadOperatorIntro(data) {
+
+    }
 }
