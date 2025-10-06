@@ -1,5 +1,5 @@
 export class Ping {
-    execute() {
+    execute(message) {
         return "pong!";
     }
 }

@@ -48,7 +48,7 @@ export class Editor {
             });
             const result = await response.json();
             if (result.edit && result.edit.result === 'Success') {
-                console.log(`Edit successful: ${source.page_name}`);
+                console.log(`Edit successful:`, result);
                 return {
                     success: true,
                     newRevId: result.edit.newrevid
@@ -149,7 +149,6 @@ export class Editor {
         });
         const cookies = lgResponse.headers.getSetCookie();
         this.cookies = cookies;
-        console.log(await lgResponse.json());
         return;
     }
    

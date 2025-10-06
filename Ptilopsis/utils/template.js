@@ -1,15 +1,24 @@
 export class Template {
+    /**
+     * @param {Object} data The data object containing necessary information.
+     * @param {string} data.text The original text to be processed.
+     * @param {string} data.source The source URL of the text.
+     */
     constructor (data) {
         this.data = data;
     }
 
     op_intro () {
+        let op_name = '';
         const lines = this.data.text.split("\n");
         let isText = false;
         let isQuote = false;
         let text = '';
         let quote = '';
         for (let item of lines) {
+            if (item.startsWith("//")) {
+                op_name = item.replace("//", "").trim();
+            }
             if (item.startsWith('“')) {
                 isQuote = true;
             }
@@ -24,8 +33,11 @@ export class Template {
                 }
             }
         }
-        const wikitext = `{{Operator intro\n|translator = \n|quote = ${quote.replace(/^<br>|<br>$/g, '').replace(/^“|”$/g, '')}\n|text = ${text.replace(/^<br>|<br>$/g, '')}\n|source = ${this.data.source}}}`;
-        return wikitext;
+        const wikitext = `{{Operator intro\n|translator = \n|quote = ${quote.replace(/^<br>|<br>$/g, '').replace(/^“|”$/g, '')}\n|text = ${text.replace(/^<br>|<br>$/g, '')}\n|source = ${this.data.source}\n}}`;
+        return {
+            wikitext: wikitext,
+            name: op_name
+        };
     }
 }
 

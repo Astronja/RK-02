@@ -1,5 +1,7 @@
 import fs from 'fs/promises';
 
+import { UpOpIntro } from './commands/up-opintro.js';
+
 export class PRTS {
     constructor (client, channelid) {
         this.posthouse = channelid;
@@ -7,9 +9,15 @@ export class PRTS {
     }
 
     async receive (id, data) {
-        switch (id.replace("RK-02", "")) {
+        if (typeof(data) == 'string' && data.startsWith('http')) {
+            const response = await fetch(data);
+            data = await response.json();
+        }
+        switch (id.replace("RK-02", "").trim()) {
             case "UPLOAD_OP_INTRO":
-                //upload operator intro
+                const upOpIntro = new UpOpIntro(data);
+                this.result = await upOpIntro.execute();
+                break;
         }
     }
 
