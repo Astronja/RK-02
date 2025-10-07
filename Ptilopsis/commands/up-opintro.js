@@ -20,7 +20,7 @@ export class UpOpIntro {
                 wikitext: result.wikitext,
                 summary: "Trial edit for operator intro uploading.",
             });
-            return JSON.stringify(editResult, null, 2);
+            return `\`\`\`${JSON.stringify(editResult, null, 2)}\`\`\``;
         } else {
             console.log(`No such operator named "${result.name}" exist in reference sheet.`);
             return `No such operator named "${result.name}" exist in reference sheet.`;

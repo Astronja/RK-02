@@ -9,49 +9,49 @@ export class Closure {
     /**
      * Gets data of operator by page name.
      * @param {string} name The targeted operator page name on closure.wiki.
-     * @returns {object} The data of the targeted operator.
-     * @returns {boolean} If the data of the targeted operator is not applicable, returns false.
+     * @returns {Promise<object>} The data of the targeted operator.
+     * @returns {Promise<boolean>} If the data of the targeted operator is not applicable, returns false.
      */
     async getOperator (name) {
-        const url = this.baseurl + "operators/" + name;
+        const url = this.baseurl + "operators/" + this.formatName(name);
         const response = await fetch(url);
-        return responseHandler(response);
+        return this.responseHandler(response);
     }
 
     /**
      * Gets data of enemy by page name.
      * @param {string} name The targeted enemy page name on closure.wiki.
-     * @returns {object} The data of the targeted enemy.
-     * @returns {boolean} If the data of the targeted enemy is not applicable, returns false.
+     * @returns {Promise<object>} The data of the targeted enemy.
+     * @returns {Promise<boolean>} If the data of the targeted enemy is not applicable, returns false.
      */
     async getEnemy (name) {
-        const url = this.baseurl + "enemies/" + name;
+        const url = this.baseurl + "enemies/" + this.formatName(name);
         const response = await fetch(url);
-        return responseHandler(response);
+        return this.responseHandler(response);
     }
 
     /**
      * Gets data of operation by page name.
      * @param {string} name The targeted operation page name on closure.wiki.
-     * @returns {object} The data of the targeted operation.
-     * @returns {boolean} If the data of the targeted operation is not applicable, returns false.
+     * @returns {Promise<object>} The data of the targeted operation.
+     * @returns {Promise<boolean>} If the data of the targeted operation is not applicable, returns false.
      */
     async getOperation (name) {
-        const url = this.baseurl + "operations/" + name;
+        const url = this.baseurl + "operations/" + this.formatName(name);
         const response = await fetch(url);
-        return responseHandler(response);
+        return this.responseHandler(response);
     }
 
     /**
      * Gets data of module by page name.
      * @param {string} name The targeted module page name on closure.wiki.
-     * @returns {object} The data of the targeted module.
-     * @returns {boolean} If the data of the targeted module is not applicable, returns false.
+     * @returns {Promise<object>} The data of the targeted module.
+     * @returns {Promise<boolean>} If the data of the targeted module is not applicable, returns false.
      */
     async getModule (name) {
-        const url = this.baseurl + "modules/" + name;
+        const url = this.baseurl + "modules/" + this.formatName(name);
         const response = await fetch(url);
-        return responseHandler(response);
+        return this.responseHandler(response);
     }
 
 
@@ -59,7 +59,7 @@ export class Closure {
 
     /**
      * Checks connection to closure.wiki
-     * @returns {boolean} If the connection is okay, return true, vice versa.
+     * @returns {Promise<boolean>} If the connection is okay, return true, vice versa.
      */
     async ok () {
         const response = await fetch("https://closure.wiki/en/home");
@@ -69,7 +69,7 @@ export class Closure {
     /**
      * Logs 404 message if the page is not found on closure.wiki.
      * @param {string} url The url that the request has made to.
-     * @returns {boolean} Returns false.
+     * @returns {Promise<boolean>} Returns false.
      */
     async pageNotFound (url) {
         console.log("Page not found, please check your spelling and check if data is ready");
@@ -81,12 +81,12 @@ export class Closure {
     /**
      * Checks if the response is ready for further data parsing.
      * @param {object} response The response data of the request.
-     * @returns {object} The json (in format of an object) data of the request.
-     * @returns {boolean} Returns false if the response status is not 200.
+     * @returns {Promise<object>} The json (in format of an object) data of the request.
+     * @returns {Promise<boolean>} Returns false if the response status is not 200.
      */
     async responseHandler (response) {
         if (response.status == 200) return await response.json();
-        else if (response.status == 404) return this.pageNotFound(url);
+        else if (response.status == 404) return this.pageNotFound(response.url);
         else console.log(response.status, response.statusText); return false;
     }
 
@@ -109,7 +109,7 @@ async function start () {
     if (await closure.ok()) { // If connection is okay
         //rest of the main executions...
         await closure.getOperator("leizi-the-thunderbringer");
-    } else Ptilopsis.alert() // report if connection failure
+    } else console.log("Closure wiki connection failed."); // report if connection failure
 }
 
 start();
