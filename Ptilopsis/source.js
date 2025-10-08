@@ -35,4 +35,23 @@ export class Source {
         await fs.writeFile(__dirname + 'reference.json', JSON.stringify(file, null, 2), 'utf8');
         return `Referring "${rname}" as "${await this.readReference(rname)}"`;
     }
+
+    async writeClosure (type, name, data) {
+        if (type != 'operator'
+            || type != 'operation'
+            || type != 'enemy'
+            || type != 'module'
+        ) return false;
+        await fs.writeFile(__dirname + 'closure/' + type + '/' + name + '.json', JSON.stringify(data, null, 2), 'utf8');
+        return true;
+    }
+
+    async readClosure (type, name) {
+        if (type != 'operator'
+            || type != 'operation'
+            || type != 'enemy'
+            || type != 'module'
+        ) return false;
+        return JSON.parse(await fs.readFile(__dirname + 'closure/' + type + '/' + name + '.json', 'utf8'));
+    }
 }

@@ -14,7 +14,7 @@ export class GetWiki {
         if (response.error) {
             return response.error.info;
         } else {
-            return response.parse.wikitext;
+            return response.parse.wikitext["*"];
         }
     }
     

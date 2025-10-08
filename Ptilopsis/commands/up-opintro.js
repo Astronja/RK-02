@@ -9,8 +9,7 @@ export class UpOpIntro {
 
     async execute () {
         //upload to wiki
-        const template = new Template(this.data);
-        const result = template.op_intro();
+        const result = Template.op_intro(this.data);
         const source = new Source();
         if (await source.readReference(result.name) != undefined) {
             const enOpName = await source.readReference(result.name);
@@ -18,7 +17,7 @@ export class UpOpIntro {
             const editResult = await editor.edit({
                 page_name: `${enOpName}/File`,
                 wikitext: result.wikitext,
-                summary: "Trial edit for operator intro uploading.",
+                summary: `Upload operator introduction for ${result.name}`,
             });
             return `\`\`\`${JSON.stringify(editResult, null, 2)}\`\`\``;
         } else {

@@ -1,3 +1,5 @@
+import { Source } from '../source.js';
+
 export class Closure {
     constructor () {
         // All valid pages of closure.wiki must include "/en" (Sept 13, 2025)
@@ -6,6 +8,17 @@ export class Closure {
 
     // public methods (for external use)
     
+    /**
+     * Writes the data of an operator if the data is fully available.
+     * @param {string} name The targeted operator page name on closure.wiki. (usually in English)
+     */
+    async writeOperatorData (name) {
+        const data = await this.getOperator(name);
+        if (this.checkOperatorSourceCompleteness(data)) {
+            new Source().writeClosure("operator", name, data);
+        }
+    } // other write methods can be added later
+
     /**
      * Gets data of operator by page name.
      * @param {string} name The targeted operator page name on closure.wiki.
@@ -90,6 +103,17 @@ export class Closure {
         else console.log(response.status, response.statusText); return false;
     }
 
+    /**
+     * Checks if an operator's original data is ready for uploading use.
+     * @param {object} data The data object containing the operator's information
+     * @returns {boolean} If the operator data is completed
+     */
+    checkOperatorSourceCompleteness (data) {
+        if (data
+            && data.charProfile.storyTextAudio.length > 0
+            // other conditions...
+        ) return true;
+    }
 
     /**
      * Formats the given string that functions as page name in closure.wiki.

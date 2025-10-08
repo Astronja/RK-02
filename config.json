@@ -9,6 +9,8 @@
         "0.1": "Project initialization.",
         "0.2.1": "Ptilopsis is able to read prts messages and react.",
         "0.2.2": "prts protocol code UPLOAD_OP_INTRO is introduced and link to up-opintro.js.",
-        "0.2.3": "setStatus is introduced to update bot status."
+        "0.2.3": "setStatus is introduced to update bot status.",
+        "0.3.1": "up-opfile.js is introduced.",
+        "0.3.2": "template.js is refactored to static methods."
     }
 }
