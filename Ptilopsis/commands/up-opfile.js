@@ -20,9 +20,17 @@ export class UpOpFile {
         const original = await (new GetWiki()).getWikiText(`${this.data.enname}/File`);
         const data = (await (new Closure()).getOperator(this.data.enname)).charProfile.storyTextAudio;
         const wikitext = Template.op_file(data, original, this.data.enname);
+        const editor = new Editor();
+        const editResult = await editor.edit({
+            page_name: `${this.data.enname}/File`,
+            wikitext: wikitext,
+            summary: `Upload operator archives for ${enname}`,
+        });
+        return `\`\`\`${JSON.stringify(editResult, null, 2)}\`\`\``;
     }
 
     /**
+     * This function will not be utilized since it's a HUGE waste of resource.
      * @returns {Promise<Array>} Returns an array of objects containing the availability of the source (boolean) and the description of the source.
      */
     async sourceReady () {
@@ -39,9 +47,7 @@ export class UpOpFile {
 
         console.log("stories", closureData.charProfile.storyTextAudio);
 
-        for (let item of closureData.charProfile.storyTextAudio) {
-            console.log(item);
-        }
+        this.ready = true;
     }
 }
 

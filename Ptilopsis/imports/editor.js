@@ -23,7 +23,7 @@ export class Editor {
                 action: 'edit',
                 title: source.page_name,
                 text: source.wikitext,
-                summary: source.summary,
+                summary: "[Ptilopsis]" + source.summary,
                 bot: true,
                 minor: true,
                 token: editToken,
