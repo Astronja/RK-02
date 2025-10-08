@@ -15,7 +15,10 @@ export class Closure {
     async writeOperatorData (name) {
         const data = await this.getOperator(name);
         if (this.checkOperatorSourceCompleteness(data)) {
-            new Source().writeClosure("operator", name, data);
+            await (new Source()).writeClosure("operator", name, data);
+            return true;
+        } else {
+            return false;
         }
     } // other write methods can be added later
 

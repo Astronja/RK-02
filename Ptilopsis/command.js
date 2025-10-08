@@ -1,4 +1,5 @@
 import { Ping } from './commands/ping.js';
+import { Queue } from './commands/queue.js';
 import { Refer } from './commands/refer.js';
 
 export class Command {
@@ -15,6 +16,9 @@ export class Command {
             case 'refer':
                 const referCommand = new Refer(command);
                 return await referCommand.execute();
+            case 'queue':
+                const queueCommand = new Queue(command);
+                return await queueCommand.execute();
             default:
                 return `Unknown command: ${command.split(" ")[0]}`;
         }

@@ -54,4 +54,20 @@ export class Source {
         ) return false;
         return JSON.parse(await fs.readFile(__dirname + 'closure/' + type + '/' + name + '.json', 'utf8'));
     }
+
+    async readQueue () {
+        return JSON.parse(await fs.readFile(__dirname + 'queue.json', 'utf8'));
+    }
+
+    async addQueue (name) {
+        let data = await this.readQueue();
+        data.push(name);
+        await fs.writeFile(__dirname + 'queue.json', JSON.stringify(data, null, 2), 'utf8');
+        return JSON.stringify(await this.readQueue());
+    }
+
+    async clearQueue () {
+        await fs.writeFile(__dirname + 'queue.json', JSON.stringify([], null, 2), 'utf8');
+        return "Task queue is successfully cleared.";
+    }
 }

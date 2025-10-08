@@ -24,9 +24,9 @@ export class UpOpFile {
         const editResult = await editor.edit({
             page_name: `${this.data.enname}/File`,
             wikitext: wikitext,
-            summary: `Upload operator archives for ${enname}`,
+            summary: `Upload operator archives for ${this.data.enname}`,
         });
-        return `\`\`\`${JSON.stringify(editResult, null, 2)}\`\`\``;
+        return `${JSON.stringify(editResult, null, 2)}`;
     }
 
     /**
