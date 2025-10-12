@@ -9,7 +9,7 @@
   "char": {
     "name": "遥",
     "description": "攻击造成<@ba.kw>法术伤害</>，技能开启后改为治疗友方单位（治疗量相当于75%攻击力）",
-    "sortIndex": 843,
+    "sortIndex": 845,
     "spTargetType": "NONE",
     "canUseGeneralPotentialItem": true,
     "canUseActivityPotentialItem": false,

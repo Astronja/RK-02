@@ -2,9 +2,8 @@ import { Template } from "../utils/template.js";
 import { Editor } from "../imports/editor.js";
 import { Closure } from "../imports/closure-wiki.js";
 import { Source } from "../source.js";
-import { GetWiki } from "../imports/getwiki.js";
 
-export class UpOpFile {
+export class UpOpDialogue {
     /**
      * 
      * @param {object} data The data object containing necessary information for uploading operator files.
@@ -17,16 +16,17 @@ export class UpOpFile {
     
     async execute () {
         //upload to wiki
-        const original = await (new GetWiki()).getWikiText(`${this.data.enname}/File`);
-        const data = (await (new Closure()).getOperator(this.data.enname, false)).charProfile.storyTextAudio;
-        const wikitext = Template.op_file(data, original, this.data.enname);
-        const editor = new Editor();
-        const editResult = await editor.edit({
-            page_name: `${this.data.enname}/File`,
-            wikitext: wikitext,
-            summary: `Upload operator archives for ${this.data.enname}`,
-        });
-        return `${JSON.stringify(editResult, null, 2)}`;
+        if (await (new Closure()).writeOperatorData(this.data.enname)) {
+            const data = (await (new Source()).readClosure('operator', this.data.enname)).charDialog;
+            const wikitext = Template.op_dialogue(this.data.enname, data);
+            const editor = new Editor();
+            const editResult = await editor.edit({
+                page_name: `${this.data.enname}/Dialogue`,
+                wikitext: wikitext,
+                summary: `Upload operator dialogues for ${this.data.enname}`,
+            });
+            return `${JSON.stringify(editResult, null, 2)}`;
+        } else return `Found invalid source from closure.wiki when uploading ${this.data.enname}'s dialogues.`;
     }
 }
 

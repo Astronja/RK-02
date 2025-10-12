@@ -1,4 +1,20 @@
+import fs from 'fs/promises';
+
 export class Template {
+
+    /**
+     * @param {string} enname The page name of the operator (usually English).
+     * @param {Array} data The data array containing necessary information.
+     * @param {number} data[].voiceIndex The index of the voiceline of the whole dialogue set.
+     * @param {string} data[].voiceText The content of the piece of voiceline.
+     * @returns {string} Returns the generated wikitext for the operator dialogues section.
+     */
+    static op_dialogue (enname, data) {
+        let wikitext = "{{Operator tab}}\n{{Translation|article}}\n{{Operator dialogue head}}\n";
+        let footer = `{{Table end}}\n\n[[Category: ${enname}]]\n[[Category: Operator dialogues]]\n`;
+        for (let item of data) wikitext+=`{{Operator dialogue cell2|no=${item.voiceIndex}|dialogue=${item.voiceText}}}\n`;
+        return wikitext + footer;
+    }
 
     /**
      * @param {Array} data The data object containing necessary information. 
@@ -14,14 +30,6 @@ export class Template {
         let footer = `[[Category: ${enname}]]\n[[Category: Operator files]]\n`;
         if (original.includes(`[[Category: ${enname}]]`)) footer = footer.replace(`[[Category: ${enname}]]\n`, "");
         if (original.includes(`[[Category: Operator files]]`)) footer = footer.replace(`[[Category: Operator files]]\n`, "");
-        console.log(footer);
-        /*
-        original.replace("{{Operator tab}}", "")
-            .replace("{{Translation|article}}", "")
-            .replace(`[[Category: ${enname}]]`, "")
-            .replace("[[Category: Operator files]]", "");
-        */
-
         const originalLines = original.split("\n");
         let index = 0;
         while (index < originalLines.length) {
@@ -100,7 +108,7 @@ export class Template {
 //only for test use
 
 async function test () {
-
+    console.log(Template.op_dialogue(JSON.parse(await fs.readFile('/root/MiLa/Ptilopsis/Ptilopsis/sources/closure/operator/Haruka.json', 'utf8')).charDialog, "Haruka"))
 }
 
 

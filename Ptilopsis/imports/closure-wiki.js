@@ -11,11 +11,17 @@ export class Closure {
     /**
      * Writes the data of an operator if the data is fully available.
      * @param {string} name The targeted operator page name on closure.wiki. (usually in English)
+     * @param {boolean} force True if update of the data is needed.
      */
-    async writeOperatorData (name) {
+    async writeOperatorData (name, force) {
+        const source = new Source();
+        if (force != true) {
+            const original = await source.readClosure('operator', name);
+            if (original) return true;
+        }
         const data = await this.getOperator(name);
         if (this.checkOperatorSourceCompleteness(data)) {
-            await (new Source()).writeClosure("operator", name, data);
+            await source.writeClosure("operator", name, data);
             return true;
         } else {
             return false;
@@ -114,7 +120,7 @@ export class Closure {
     checkOperatorSourceCompleteness (data) {
         if (data
             && data.charProfile.storyTextAudio.length > 0
-            // other conditions...
+            && data.charDialog.length > 0
         ) return true;
     }
 
@@ -130,12 +136,12 @@ export class Closure {
 }
 
 
-// usage
+// only for test use
 async function start () {
     const closure = new Closure();
     if (await closure.ok()) { // If connection is okay
         //rest of the main executions...
-        await closure.getOperator("leizi-the-thunderbringer");
+        console.log(await closure.writeOperatorData("Snegyrochka", true));
     } else console.log("Closure wiki connection failed."); // report if connection failure
 }
 

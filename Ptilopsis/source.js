@@ -38,9 +38,9 @@ export class Source {
 
     async writeClosure (type, name, data) {
         if (type != 'operator'
-            || type != 'operation'
-            || type != 'enemy'
-            || type != 'module'
+            && type != 'operation'
+            && type != 'enemy'
+            && type != 'module'
         ) return false;
         await fs.writeFile(__dirname + 'closure/' + type + '/' + name + '.json', JSON.stringify(data, null, 2), 'utf8');
         return true;
@@ -48,11 +48,13 @@ export class Source {
 
     async readClosure (type, name) {
         if (type != 'operator'
-            || type != 'operation'
-            || type != 'enemy'
-            || type != 'module'
+            && type != 'operation'
+            && type != 'enemy'
+            && type != 'module'
         ) return false;
-        return JSON.parse(await fs.readFile(__dirname + 'closure/' + type + '/' + name + '.json', 'utf8'));
+        const path = __dirname + 'closure/' + type + '/' + name + '.json';
+        if (await this.checkExist(path)) return JSON.parse(await fs.readFile(path, 'utf8'));
+        return false;
     }
 
     async readQueue () {
@@ -70,4 +72,21 @@ export class Source {
         await fs.writeFile(__dirname + 'queue.json', JSON.stringify([], null, 2), 'utf8');
         return "Task queue is successfully cleared.";
     }
+
+    async checkExist (filePath) {
+        try {
+            await fs.access(filePath);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
 }
+
+// only for test use
+async function start () {
+    const source = new Source();
+    console.log(await source.readClosure("operator", "Json"));
+}
+
+//start();

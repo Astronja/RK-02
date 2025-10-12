@@ -1,5 +1,6 @@
 import { Source } from '../source.js';
 import { UpOpFile } from './up-opfile.js';
+import { UpOpDialogue } from './up-opdialogue.js';
 import { Closure } from '../imports/closure-wiki.js';
 
 export class Queue {
@@ -41,10 +42,13 @@ export class Queue {
             for (let item of taskList) {
                 const enname = await source.readReference(item);
                 if (await closure.writeOperatorData(enname)) {
+                    /*
                     const opFile = new UpOpFile({ cnname: item, enname: enname});
-                    const result = await opFile.execute();
-                    resultList.push(result);
-                    console.log(result);
+                    resultList.push(await opFile.execute());
+                    */
+                   
+                    const opDialogue = new UpOpDialogue({ cnname: item, enname: enname});
+                    resultList.push(await opDialogue.execute());
                 }
             }
         }
