@@ -145,4 +145,4 @@ async function start () {
     } else console.log("Closure wiki connection failed."); // report if connection failure
 }
 
-start();
+//start();

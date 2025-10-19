@@ -39,4 +39,4 @@ async function test () {
     //console.log(up.name);
 }
 
-test();
+//test();

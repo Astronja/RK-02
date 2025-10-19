@@ -1,6 +1,7 @@
 import { Source } from '../source.js';
 import { UpOpFile } from './up-opfile.js';
 import { UpOpDialogue } from './up-opdialogue.js';
+import { UpOpGallery } from './up-opgallery.js';
 import { Closure } from '../imports/closure-wiki.js';
 
 export class Queue {
@@ -43,12 +44,13 @@ export class Queue {
                 const enname = await source.readReference(item);
                 if (await closure.writeOperatorData(enname)) {
                     /*
-                    const opFile = new UpOpFile({ cnname: item, enname: enname});
+                    const opFile = new UpOpFile({ cnname: item, enname: enname });
                     resultList.push(await opFile.execute());
-                    */
-                   
-                    const opDialogue = new UpOpDialogue({ cnname: item, enname: enname});
+                    const opDialogue = new UpOpDialogue({ cnname: item, enname: enname });
                     resultList.push(await opDialogue.execute());
+                    */
+                   const opGallery = new UpOpGallery({ cnname: item, enname: enname });
+                   resultList.push(await opGallery.execute());
                 }
             }
         }
