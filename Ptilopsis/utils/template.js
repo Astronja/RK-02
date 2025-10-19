@@ -1,8 +1,34 @@
-import fs from 'fs/promises';
-
 export class Template {
 
     /**
+     * @param {string} 
+     */
+    static op_main () {
+        
+    }
+
+
+    /**
+     * @param {string} 
+     */
+    static op_gallery_skin () {
+
+    }
+
+    /**
+     * Initialization of ~/OPERATOR/Gallery page.
+     * @param {string} enname The page name of the operator (usually English).
+     * @param {boolean} noe2 True if the operator does not have a E2 art.
+     * @returns {string} Returns the generated wikitext for the operator gallery section.
+     */
+    static op_gallery (enname, noe2) {
+        let wikitext = `{{Operator tab}}\n\n==Skins==\n{{Operator skin\n|name = base}}\n{{Operator skin\n|name = e2}}\n\n==Sprites==\n<gallery widths=360px>\n${enname}.webm|gif|${enname}'s Base Sprite\n</gallery>`;
+        if (noe2) wikitext = wikitext.replace("\n{{Operator skin\n|name = e2}}", "");
+        return wikitext;
+    }
+
+    /**
+     * Initialization of ~/OPERATOR/Dialogue page.
      * @param {string} enname The page name of the operator (usually English).
      * @param {Array} data The data array containing necessary information.
      * @param {number} data[].voiceIndex The index of the voiceline of the whole dialogue set.
@@ -17,6 +43,7 @@ export class Template {
     }
 
     /**
+     * Modification of ~/OPERATOR/File page, prescence of /File page is assumed due to the prior execution of op_intro() 
      * @param {Array} data The data object containing necessary information. 
      * @param {string} data[].storyTitle The title of the archive segment.
      * @param {Array} data[].stories The array of story objects.
@@ -67,6 +94,7 @@ export class Template {
     }
 
     /**
+     * Initialization of ~/OPERATOR/File
      * @param {Object} data The data object containing necessary information.
      * @param {string} data.text The original text to be processed.
      * @param {string} data.source The source URL of the text.
@@ -108,7 +136,7 @@ export class Template {
 //only for test use
 
 async function test () {
-    console.log(Template.op_dialogue(JSON.parse(await fs.readFile('/root/MiLa/Ptilopsis/Ptilopsis/sources/closure/operator/Haruka.json', 'utf8')).charDialog, "Haruka"))
+    console.log(Template.op_gallery("THRM-EX", true));
 }
 
 
