@@ -3,6 +3,8 @@ export class UpOperator {
         this.name = name;
     }
 
-
+    async execute () {
+        
+    }
 
 }

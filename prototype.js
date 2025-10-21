@@ -33,6 +33,8 @@ export class Prototype {
         await this.discordClient.login(this.discordToken);
         this.discordClient.once('clientReady', async (c) => {
             this.log(`Logged in as ${c.user.tag}`);
+            const guild = this.discordClient.guilds.cache.get(this.config.guild);
+            await guild.commands.set(Command.registerCommand());
             if (c.user.username.includes("Ada")) {
                 this.discordClient.user.setPresence({
                     activities: [{ 

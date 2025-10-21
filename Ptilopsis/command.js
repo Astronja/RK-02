@@ -8,6 +8,15 @@ export class Command {
         this.version = '0.0.1';
     }
 
+    static registerCommand () {
+        return [
+            {
+                name: "upload",
+                description: "Start an upload session!"
+            }
+        ]
+    }
+
     async executeCommand(command) {
         switch (command.split(" ")[0]) {
             case 'ping':

@@ -1,6 +1,7 @@
 export class Template {
 
     /**
+     * Initialization of ~/OPERATOR page.
      * @param {string} 
      */
     static op_main () {
