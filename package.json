@@ -12,7 +12,9 @@
   "dependencies": {
     "discord.js": "^14.22.1",
     "dotenv": "^16.0.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "js-beautify": "^1.15.4",
+    "jsdom": "^27.0.1"
   },
   "type": "module"
 }

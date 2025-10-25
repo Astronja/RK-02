@@ -153,3 +153,9 @@ sources
 
 # workspace style
 custom.css
+
+# temporals
+temp.txt
+temp.js
+temp.ts
+temp.json
