@@ -1,30 +1,272 @@
 export class Template {
-
     /**
      * Initialization of ~/OPERATOR page.
      * @param {object} data The data regarding the operator
+     * @param {boolean} init True if creating page
      */
-    static op_main () {
+    static op_main (data, init) {
+        const wikitextList = [];
         const header = "{{Operator notice|unreleased}}";
+        wikitextList.push(header);
         const info = formatCell({
             name: "Operator info",
             content: {
-                name: "Snegurochka", // proper page name (e.g. Snegurochka)
-                name2: "", // alternative name (e.g. Russian: Снегурочка 🤶)
-                catname: "", // 
-                class: "Vanguard", //
+                /**
+                 * proper page name
+                 * (e.g. Snegurochka)
+                 * Provided in: INITIAL
+                 */
+                name: "Snegurochka",
+                //catname: "", // this is probably deprecated
+                /**
+                 * operator's profession
+                 * (e.g. Vanguard)
+                 * Provided in: INITIAL
+                 */
+                class: "Vanguard",
+                /**
+                 * operator's profession branch
+                 * (e.g. Agent)
+                 * Provided in: INITIAL
+                 */
                 branch: "Agent",
+                /**
+                 * operator's faction
+                 * (e.g. Rhodes Island)
+                 * Provided in: INITIAL
+                 */
                 faction: "Ursus",
+                /**
+                 * operator's rarity
+                 * (e.g. 4)
+                 * Provided in: INITIAL
+                 */
                 rarity: 4,
+                /**
+                 * operator's position
+                 * (e.g. Melee)
+                 * Provided in: INITIAL
+                 */
                 position: "Melee",
+                /**
+                 * operator's tags
+                 * (e.g. DP-Recovery, Fast-Redeploy)
+                 * Provided in: RELEASE
+                 */
                 tags: "DP-Recovery, Fast-Redeploy",
+                /**
+                 * operator's trait
+                 * (e.g. DP-Recovery, Fast-Redeploy)
+                 * Provided in: RELEASE
+                 */
                 trait: "Has {{Color|reduced|kw}} Redeployment Time, can use ranged attacks",
+                /**
+                 * operator's available headhunting banner
+                 * (e.g. standard cn)
+                 * Provided in: INITIAL
+                 */
                 headhunting: "standard cn",
+                /**
+                 * operator's description (do not mix up with trait)
+                 * (e.g. "Vanguard Operator Snegurochka treats every data with utmost care.")
+                 * Provided in: RELEASE
+                 */
                 desc: "Vanguard Operator Snegurochka treats every data with utmost care.",
+                /**
+                 * opeartor's quote (in game) 
+                 * (e.g. "Not every problem in the world has solution, but she tries to look for one.")
+                 * Provided in: RELEASE
+                 */
                 quote: "Not every problem in the world has solution, but she tries to look for one.",
+                /**
+                 * true if this operator is explicit to cn server
+                 * (e.g. true)
+                 * Provided in: INITIAL
+                 */
                 cn: true
             }
         });
+        wikitextList.push(info);
+        const optab = "{{Operator tab}}";
+        wikitextList.push(optab);
+        const infobox = formatCell({
+            name: "Operator infobox",
+            content: {
+                /**
+                 * operator's English or romanized name, usually same with the page name
+                 * Provided in: INITIAL
+                 */
+                name: "Snegurochka", 
+                /**
+                 * pronounciation of the name
+                 * Provided in: MANUAL
+                 */
+                pronunc: "[[wikipedia:Help:IPA/Russian/|/sʲnʲɪˈɡurət͡ɕkə, sʲnʲɪˈɡurkə/]]",
+                /**
+                 * rarity, in format of `${num}star`
+                 * Provided in: INITIAL
+                 */
+                rarity: "4star",
+                /**
+                 * since this page will be created before opeartor is officially released, this part will be commented out to avoid exceptions
+                 * Provided in: INITIAL
+                 */
+                image: "<!--\nSnegurochka.png:Base;\nSnegurochka Elite 2.png:Elite 2\n-->",
+                /**
+                 * operator's cn name
+                 * Provided in: INITIAL
+                 */
+                cnname: "冬时",
+                /**
+                 * since usually the operator's name is already in English, this is not commonly used
+                 * Provided in: INITIAL
+                 */
+                enname: "Snegurochka",
+                /**
+                 * operator's japanese name
+                 * Provided in: MANUAL
+                 */
+                jpname: "",
+                /**
+                 * operator's korean name
+                 * Provided in: MANUAL
+                 */
+                krname: "",
+                /**
+                 * operator realname
+                 * Provided in: MANUAL
+                 */
+                realname: "{{Names|text=Ksenia Markovna Nelyudova|cn=科谢尼娅·马尔科芙娜·涅留朵娃}}",
+                /**
+                 * operator's nickname (or alternative one)
+                 * Provided in: MANUAL
+                 */
+                othername: "",
+                /**
+                 * operator's EP
+                 * Provided in: MANUAL
+                 */
+                theme: "",
+                /**
+                 * operator's basis, usually animals
+                 * Provided in: MANUAL
+                 */
+                basis: "[[wikipedia:Daurian jackdaw|Daurian jackdaw]] (''Coloeus dauuricus'')",
+                /**
+                 * operator's name's etymology
+                 * Provided in: MANUAL
+                 */
+                etymology: "[[wikipedia:Snegurochka|Snegurochka in Russian fairy tales]]",
+                /**
+                 * operator's in-game code
+                 * Provided in: RELEASE
+                 */
+                filename: "char_4208_wintim",
+                /**
+                 * operator's archive code
+                 * Provided in: RELEASE
+                 */
+                fileno: "US38",
+                //appearance: "", // deprecated
+                /**
+                 * illustrator of the operator
+                 * Provided in: INITIAL
+                 */
+                illustrator: "3MO",
+                /**
+                 * operator's Japanese voice
+                 * Provided in: INITIAL
+                 */
+                jpcv: "Saya Hitomi",
+                /**
+                 * operator's Mandarin voice
+                 * Provided in: INITIAL
+                 */
+                cncv: "Wang Yaxin",
+                /**
+                 * operator's English voice
+                 * Provided in: MANUAL
+                 */
+                encv: "",
+                /**
+                 * operator's Korean voice
+                 * Provided in: MANUAL
+                 */
+                krcv: "",
+                /**
+                 * operator's gender
+                 * Provided in: INITIAL
+                 */
+                gender: "Female",
+                /**
+                 * operator's battling experience, measured in time.
+                 * Provided in: RELEASE
+                 */
+                experience: "None",
+                /**
+                 * operator's birthplace
+                 * Provided in: RELEASE
+                 */
+                birthplace: "Ursus",
+                /**
+                 * operator's birthdate
+                 * Provided in: RELEASE
+                 */
+                birthdate: "December 1st",
+                /**
+                 * operator's race
+                 * Provided in: RELEASE
+                 */
+                race: "[[Liberi]]",
+                /**
+                 * operator's physical height
+                 * Provided in: RELEASE
+                 */
+                height: "170 cm",
+                /**
+                 * operator's infection status, if infected: "Confirmed [[Infected]] by medical examination.", "Confirmed Uninfected by medical examination." vice versa
+                 * Provided in: RELEASE
+                 */
+                infection: "Medical tests have confirmed that no infection is present.",
+                /**
+                 * rated by 8 levels: feeble, flawed, normal, standard, average, outstanding, exceptional
+                 * Provided in: RELEASE
+                 */
+                strength: "",
+                /**
+                 * see above
+                 * Provided in: RELEASE
+                 */
+                mobility: "",
+                /**
+                 * see above
+                 * Provided in: RELEASE
+                 */
+                endurance: "",
+                /**
+                 * see above
+                 * Provided in: RELEASE
+                 */
+                tactical: "",
+                /**
+                 * see above
+                 * Provided in: RELEASE
+                 */
+                skill: "", // see above
+                /**
+                 * see above
+                 * Provided in: RELEASE
+                 */
+                originium: ""
+            }
+        });
+        wikitextList.push(infobox);
+        const summary = "'''Snegurochka''' is a [[4-star|4★]] [[Ursus|Ursine]] [[Agent Vanguard]] [[Operator]] in ''[[Arknights]]'', introduced in [[Abnormal Spectrum]]."
+        // const summary = '''{{subst:#titleparts:{{subst:PAGENAME}}}}''' is a [[-star|★]] [[]] [[]] [[Operator]] in ''[[Arknights]]'', introduced in [[]].
+        // ⬆️ this is the one provided in the boiler template.
+        wikitextList.push(summary);
+
+
         return info;
     }
 
@@ -33,7 +275,7 @@ export class Template {
      * @param {string} 
      */
     static op_gallery_skin () {
-
+        
     }
 
     /**
