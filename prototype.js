@@ -64,6 +64,13 @@ export class Prototype {
                 } else await message.reply("Please send PRTS messages to <#1408285577958391922>.");
             }
         });
+        this.discordClient.on('interactionCreate', async (interaction) => {
+            if (interaction.isCommand()) {
+                await interaction.deferReply();
+                const request = new Command();
+                request.slashCommandHandler(interaction);
+            }
+        });
     }
 
     async updateStatus () {

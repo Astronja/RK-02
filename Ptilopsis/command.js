@@ -1,6 +1,7 @@
 import { Ping } from './commands/ping.js';
 import { Queue } from './commands/queue.js';
 import { Refer } from './commands/refer.js';
+import { Upload } from './commands/upload.js';
 
 export class Command {
     constructor() {
@@ -17,7 +18,7 @@ export class Command {
         ]
     }
 
-    async executeCommand(command) {
+    async executeCommand (command) {
         switch (command.split(" ")[0]) {
             case 'ping':
                 const pingCommand = new Ping();
@@ -30,6 +31,14 @@ export class Command {
                 return await queueCommand.execute();
             default:
                 return `Unknown command: ${command.split(" ")[0]}`;
+        }
+    }
+
+    async slashCommandHandler (interaction) {
+        switch (interaction.commandName) {
+            case 'upload':
+                const uploadCommand = new Upload();
+                uploadCommand.execute(interaction);
         }
     }
 }

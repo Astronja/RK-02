@@ -2,10 +2,30 @@ export class Template {
 
     /**
      * Initialization of ~/OPERATOR page.
-     * @param {string} 
+     * @param {object} data The data regarding the operator
      */
     static op_main () {
-        
+        const header = "{{Operator notice|unreleased}}";
+        const info = formatCell({
+            name: "Operator info",
+            content: {
+                name: "Snegurochka", // proper page name (e.g. Snegurochka)
+                name2: "", // alternative name (e.g. Russian: Снегурочка 🤶)
+                catname: "", // 
+                class: "Vanguard", //
+                branch: "Agent",
+                faction: "Ursus",
+                rarity: 4,
+                position: "Melee",
+                tags: "DP-Recovery, Fast-Redeploy",
+                trait: "Has {{Color|reduced|kw}} Redeployment Time, can use ranged attacks",
+                headhunting: "standard cn",
+                desc: "Vanguard Operator Snegurochka treats every data with utmost care.",
+                quote: "Not every problem in the world has solution, but she tries to look for one.",
+                cn: true
+            }
+        });
+        return info;
     }
 
 
@@ -134,10 +154,43 @@ export class Template {
     }
 }
 
+const formatCell = (data) => {
+    let wikitext = `{{${data.name}\n`;
+    for (let key in data.content) wikitext+=`|${key} = ${data.content[key]}\n`;
+    return wikitext + "}}\n";
+}
+
+/**
+ * Parsing wikitext inscribed in templates, only supporting some of the templates.
+ * @param {string} wikitext The wikitext CELL that needs to be parsed. It should be using an template and the formate has to be in:
+ * {{name
+ * |a = apple
+ * |b = banana
+ * |...}}.
+ * @returns {object} Supposedly parsed wikitext.
+ */
+const parseCell = (wikitext) => {
+    wikitext = wikitext.replace(/}}$/, "");
+    let cell = { name: "", content: {} };
+    const textList = wikitext.split("\n|");
+    cell['name'] = textList[0].replaceAll("\n", "").replaceAll("{{", "");
+    for (let item of textList) {
+        if (item.includes("=")) {
+            let string = item.replace(/\n$/, "");
+            if (string.startsWith("\n")) string = string.replace("\n", "");
+            const splitted = string.split("=");
+            const left = splitted[0].trim();
+            const right = splitted.join("").replace(left, "").trim();
+            cell['content'][left] = right;
+        }
+    }
+    return cell;
+}
+
 //only for test use
 
 async function test () {
-    console.log(Template.op_gallery("THRM-EX", true));
+    console.log(parseCell(Template.op_main()));
 }
 
 
