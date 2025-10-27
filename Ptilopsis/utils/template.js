@@ -397,9 +397,15 @@ export class Template {
 }
 
 const formatCell = (data) => {
-    let wikitext = `{{${data.name}\n`;
-    for (let key in data.content) wikitext+=`|${key} = ${data.content[key]}\n`;
-    return wikitext + "}}\n";
+    if (typeof(data) == "object") {
+        let wikitext = `{{${data.name}\n`;
+        for (let key in data.content) wikitext+=`|${key} = ${data.content[key]}\n`;
+        return wikitext + "}}\n";
+    } else {
+        let wikitext = `{{${data[0]}\n`;
+        for (var i = 1; i < data.length; i++) wikitext+=`|${data[i]}`;
+        return wikitext + "}}\n";
+    }
 }
 
 /**
@@ -429,10 +435,34 @@ const parseCell = (wikitext) => {
     return cell;
 }
 
+const getRange = (rangeId) => {
+    const range = {
+        "1-1": "{{Ranges|s|r}}\n",
+        "1-2": "{{Ranges|r|p}}{{Ranges|s|r}}{{Ranges|r|p}}\n",
+        "2-3": "{{Ranges|r|r|p}}{{Ranges|s|r|r}}{{Ranges|r|r|p}}\n",
+        "3-1": "{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}\n",
+        "3-3": "{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n",
+        "3-4": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}\n", // Identical with 3-15, but Lumen used 3-4 and Mostima skill used 3-15
+        "3-6": "{{Ranges|r|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|r}}\n",
+        "3-8": "{{Ranges|r|r|r|r|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|p}}\n",
+        "3-9": "{{Ranges|r|r|r|p|p}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|s|r|r|r}|r}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|p|p}}\n",
+        "3-10": "{{Ranges|r|r|r|r|r}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|r}}\n",
+        "3-15": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}",
+        "3-17": "{{Ranges|p|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|p|r|r|r}}\n",
+        "3-18": "{{Ranges|r|r|p|p}}\n{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}\n{{Ranges|r|r|p|p}}\n",
+        "x-1": "{{Ranges|p|p|r|p|p}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|r|r|s|r|r}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|p|p|r|p|p}}\n",
+        "x-4": "{{Ranges|r|r|r}}\n{{Ranges|r|s|r}}\n{{Ranges|r|r|r}}\n",
+        "y-1": "{{Ranges|r|r|r|p}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|p}}\n",
+        "y-2": "{{Ranges|r|r|r|r}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|r}}\n",
+        "y-4": "{{Ranges|r|r|r|p|p}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|s|r|r}|r}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|p|p}}\n"
+    }
+    return range[rangeId];
+}
+
 //only for test use
 
 async function test () {
-    console.log(parseCell(Template.op_main()));
+    console.log(getRange("3-6"));
 }
 
 

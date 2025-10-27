@@ -2,6 +2,7 @@ import { Ping } from './commands/ping.js';
 import { Queue } from './commands/queue.js';
 import { Refer } from './commands/refer.js';
 import { Upload } from './commands/upload.js';
+import { PV } from './commands/pv.js';
 
 export class Command {
     constructor() {
@@ -18,6 +19,14 @@ export class Command {
         ]
     }
 
+    async attachmentCommand (command, file) {
+        switch (command.split(" ")[0]) {
+            case 'pv':
+                const pvCommand = new PV(command, file);
+                return await pvCommand.execute();
+        }
+    }
+
     async executeCommand (command) {
         switch (command.split(" ")[0]) {
             case 'ping':
@@ -29,6 +38,9 @@ export class Command {
             case 'queue':
                 const queueCommand = new Queue(command);
                 return await queueCommand.execute();
+            case 'pv':
+                const pvCommand = new PV(command);
+                return await pvCommand.execute();
             default:
                 return `Unknown command: ${command.split(" ")[0]}`;
         }

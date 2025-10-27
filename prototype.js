@@ -51,6 +51,11 @@ export class Prototype {
             if (message.content.startsWith(this.prefix)) {
                 const command = message.content.replace(this.prefix, '').trim();
                 const request = new Command();
+                if (message.attachments.map(file => file).length > 0) {
+                    const response = await request.attachmentCommand(command, message.attachments.map(file => file.url)[0]);
+                    await message.reply(response);
+                    return;
+                }
                 const response = await request.executeCommand(command);
                 await message.reply(response);
             }
