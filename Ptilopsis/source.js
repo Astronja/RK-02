@@ -6,6 +6,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename) + "/sources/";
 dotenv.config({ path: __dirname + '.env' });
 
+export class source {
+    static env (property) {
+        return process.env[property];
+    }
+}
+
+/* IMMA REWRITE THIS DOGSHIT
 export class Source {
     env (property) {
         return process.env[property];
@@ -82,6 +89,7 @@ export class Source {
         }
     }
 }
+*/
 
 // only for test use
 async function start () {

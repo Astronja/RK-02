@@ -1,4 +1,4 @@
-import { Source } from '../source.js';
+import { source } from '../source.js';
 
 export class Editor {
     constructor () {
@@ -7,13 +7,13 @@ export class Editor {
 
     /** 
     * Execute edit action on wiki page.
-    * @param {object} source The source code needed to be uploaded to wiki, including config & other params sepcified below.
-    * @param {string} source.page_name The name of the page that needs to be modified, the page can be not yet created.
-    * @param {string} source.wikitext The wikitext needs to be uploaded to the page
-    * @param {string} source.summary The comment you want to leave for this edit, maybe you want to indicate that this is a bot edit.
+    * @param {object} data The source code needed to be uploaded to wiki, including config & other params sepcified below.
+    * @param {string} data.page_name The name of the page that needs to be modified, the page can be not yet created.
+    * @param {string} data.wikitext The wikitext needs to be uploaded to the page
+    * @param {string} data.summary The comment you want to leave for this edit, maybe you want to indicate that this is a bot edit.
     * @returns {Promise<object>} The edit result rertrieved from the wiki.
     */ 
-    async edit (source) {
+    async edit (data) {
         try {
             await this.login();
             await this.delay();
@@ -21,9 +21,9 @@ export class Editor {
             await this.delay();
             const params = new URLSearchParams({
                 action: 'edit',
-                title: source.page_name,
-                text: source.wikitext,
-                summary: "[Ptilopsis]" + source.summary,
+                title: data.page_name,
+                text: data.wikitext,
+                summary: "[Ptilopsis]" + data.summary,
                 bot: true,
                 minor: true,
                 token: editToken,
@@ -37,7 +37,7 @@ export class Editor {
                     'Cookie': this.cookies,
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
                     'Origin': 'https://arknights.wiki.gg',
-                    'Referer': `https://arknights.wiki.gg/wiki/${encodeURIComponent(source.page_name)}`,
+                    'Referer': `https://arknights.wiki.gg/wiki/${encodeURIComponent(data.page_name)}`,
                     'Accept': 'application/json, */*',
                     'Accept-Encoding': 'gzip, deflate, br',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -114,7 +114,6 @@ export class Editor {
     }
 
     async login () {
-        const source = new Source();
         await this.getCookies();
         const loginToken = await this.getToken(this.cookies, 'login');
         const lgParams = new URLSearchParams({
@@ -223,4 +222,4 @@ async function test () {
     });
 }
 
-//test();
+test();

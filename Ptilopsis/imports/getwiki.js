@@ -1,16 +1,20 @@
-export class GetWiki {
+const url = 'https://arknights.wiki.gg/api.php?';
+
+export class /*GetWiki*/ wiki {
+    /* I AM TURNING EVERY SHIT STATIC THEREFORE SORRY MY CONSTRUCTORS
     constructor () {
         this.url = 'https://arknights.wiki.gg/api.php?';
     }
+    */
 
-    async getWikiText (page_name) {
+    static async getWikiText (page_name) {
         const params = {
             action: 'parse',
             prop: 'wikitext',
             page: page_name,
             format: 'json'
         }
-        const response = await (await fetch(this.url + new URLSearchParams(params))).json();
+        const response = await (await fetch(url + new URLSearchParams(params))).json();
         if (response.error) {
             return response.error.info;
         } else {
@@ -18,7 +22,7 @@ export class GetWiki {
         }
     }
     
-    async listCategoryMembers (category_name) {
+    static async listCategoryMembers (category_name) {
         if (!category_name.startsWith('Category:')) {
             category_name = 'Category:' + category_name;
         }
@@ -29,8 +33,8 @@ export class GetWiki {
             cmlimit: 500,
             format: 'json'
         }
-        const response = await (await fetch(this.url + new URLSearchParams(params))).json();
-        console.log(this.url + new URLSearchParams(params));
+        const response = await (await fetch(url + new URLSearchParams(params))).json();
+        console.log(url + new URLSearchParams(params));
         if (response.error) {
             return response.error.info;
         } else {
@@ -38,7 +42,7 @@ export class GetWiki {
         }
     }
     
-    async getImageURL (file_name) {
+    static async getImageURL (file_name) {
         
         let fn = file_name;
         if (!file_name.startsWith('File:')) {
@@ -51,7 +55,7 @@ export class GetWiki {
             iiprop: 'url',
             format: 'json'
         }
-        const response = await (await fetch(this.url + new URLSearchParams(params))).json();
+        const response = await (await fetch(url + new URLSearchParams(params))).json();
         if (response.error) {
             return response.error.info;
         } else {
@@ -60,13 +64,13 @@ export class GetWiki {
         }
     }
 
-    async getInfo(page_name) {
+    static async getInfo(page_name) {
         const params = {
             action: 'parse',
             page: page_name,
             format: 'json'
         }
-        const response = await (await fetch(this.url + new URLSearchParams(params))).json();
+        const response = await (await fetch(url + new URLSearchParams(params))).json();
         if (response.error) {
             return response.error.info;
         } else {

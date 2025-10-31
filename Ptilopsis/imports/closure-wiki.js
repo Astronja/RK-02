@@ -1,32 +1,18 @@
-import { Source } from '../source.js';
+import slugify from 'slugify';
+const baseurl = "https://api.closure.wiki/v2/en/";
 
-export class Closure {
+export class closure {
+    /* I AM TURNING EVERY SHIT STATIC THEREFORE SORRY MY CONSTRUCTORS
     constructor () {
         // All valid pages of closure.wiki must include "/en" (Sept 13, 2025)
         this.baseurl = "https://api.closure.wiki/en/";
+        // API V2 is recommended to be used, since V1 does not assure connection. (Oct 29, 2025)
+        this.v2url = "https://api.closure.wiki/v2/en/";
+        this.baseurl = this.v2url;
     }
+    */
 
     // public methods (for external use)
-    
-    /**
-     * Writes the data of an operator if the data is fully available.
-     * @param {string} name The targeted operator page name on closure.wiki. (usually in English)
-     * @param {boolean} force True if update of the data is needed.
-     */
-    async writeOperatorData (name, force) {
-        const source = new Source();
-        if (force != true) {
-            const original = await source.readClosure('operator', name);
-            if (original) return true;
-        }
-        const data = await this.getOperator(name);
-        if (this.checkOperatorSourceCompleteness(data)) {
-            await source.writeClosure("operator", name, data);
-            return true;
-        } else {
-            return false;
-        }
-    } // other write methods can be added later
 
     /**
      * Gets data of operator by page name.
@@ -34,8 +20,8 @@ export class Closure {
      * @returns {Promise<object>} The data of the targeted operator.
      * @returns {Promise<boolean>} If the data of the targeted operator is not applicable, returns false.
      */
-    async getOperator (name) {
-        const url = this.baseurl + "operators/" + this.formatName(name);
+    static async getOperator (name) {
+        const url = baseurl + "operators/" + this.formatName(name);
         const response = await fetch(url);
         return this.responseHandler(response);
     }
@@ -46,8 +32,8 @@ export class Closure {
      * @returns {Promise<object>} The data of the targeted enemy.
      * @returns {Promise<boolean>} If the data of the targeted enemy is not applicable, returns false.
      */
-    async getEnemy (name) {
-        const url = this.baseurl + "enemies/" + this.formatName(name);
+    static async getEnemy (name) {
+        const url = baseurl + "enemies/" + this.formatName(name);
         const response = await fetch(url);
         return this.responseHandler(response);
     }
@@ -58,8 +44,8 @@ export class Closure {
      * @returns {Promise<object>} The data of the targeted operation.
      * @returns {Promise<boolean>} If the data of the targeted operation is not applicable, returns false.
      */
-    async getOperation (name) {
-        const url = this.baseurl + "operations/" + this.formatName(name);
+    static async getOperation (name) {
+        const url = baseurl + "operations/" + this.formatName(name);
         const response = await fetch(url);
         return this.responseHandler(response);
     }
@@ -70,8 +56,8 @@ export class Closure {
      * @returns {Promise<object>} The data of the targeted module.
      * @returns {Promise<boolean>} If the data of the targeted module is not applicable, returns false.
      */
-    async getModule (name) {
-        const url = this.baseurl + "modules/" + this.formatName(name);
+    static async getModule (name) {
+        const url = baseurl + "modules/" + this.formatName(name);
         const response = await fetch(url);
         return this.responseHandler(response);
     }
@@ -83,33 +69,33 @@ export class Closure {
      * Checks connection to closure.wiki
      * @returns {Promise<boolean>} If the connection is okay, return true, vice versa.
      */
-    async ok () {
-        const response = await fetch("https://closure.wiki/en/home");
+    static async ok () {
+        const response = await fetch("https://api.closure.wiki/");
         return response.ok;
     }
 
     /**
      * Logs 404 message if the page is not found on closure.wiki.
      * @param {string} url The url that the request has made to.
-     * @returns {Promise<boolean>} Returns false.
+     * @returns {string} Returns error message of 404.
      */
-    async pageNotFound (url) {
+    static pageNotFound (url) {
         console.log("Page not found, please check your spelling and check if data is ready");
         console.log("Access URL: ", url.replace("api.", ""));
         console.log("API URL: ", url);
-        return false;
+        return `[ERROR] Page not found with request url: ${url}`;
     }
     
     /**
      * Checks if the response is ready for further data parsing.
      * @param {object} response The response data of the request.
      * @returns {Promise<object>} The json (in format of an object) data of the request.
-     * @returns {Promise<boolean>} Returns false if the response status is not 200.
+     * @returns {Promise<string>} Returns error message if the response status is not 200.
      */
-    async responseHandler (response) {
+    static async responseHandler (response) {
         if (response.status == 200) return await response.json();
         else if (response.status == 404) return this.pageNotFound(response.url);
-        else console.log(response.status, response.statusText); return false;
+        else return `[ERROR] Code ${response.status}: ${response.statusText}`;
     }
 
     /**
@@ -117,20 +103,35 @@ export class Closure {
      * @param {object} data The data object containing the operator's information
      * @returns {boolean} If the operator data is completed
      */
+    /* DEPRECATED
     checkOperatorSourceCompleteness (data) {
         if (data
             && data.charProfile.storyTextAudio.length > 0
             && data.charDialog.length > 0
         ) return true;
-    }
+    }*/
+    
 
     /**
      * Formats the given string that functions as page name in closure.wiki.
      * @param {string} name The unformatted page name 
      * @returns {string} The formatted page name that is valid in closure.wiki
      */
-    formatName (name) {
-        const result = name.toLowerCase().replaceAll(' ', '-');
+    static formatName (name) {
+        switch (name) {
+            case "Gummy":
+                return "gum";
+            case "Pozëmka":
+                return "pozyomka";
+            case "THRM-EX":
+                return "thermal-ex";
+            case "Mr. Nothing": 
+                return "mrnothing";
+            case "Miss. Christine":
+                return "misschristine";
+        }
+        //const result = name.toLowerCase().replaceAll(' ', '-');
+        const result = slugify(name, { lower: true, strict: true });
         return result;
     }
 }
@@ -138,11 +139,8 @@ export class Closure {
 
 // only for test use
 async function start () {
-    const closure = new Closure();
-    if (await closure.ok()) { // If connection is okay
-        //rest of the main executions...
-        console.log(await closure.writeOperatorData("Snegyrochka", true));
-    } else console.log("Closure wiki connection failed."); // report if connection failure
+    const data = await closure.getOperator("mrnothing");
+    console.log(data);
 }
 
-//start();
+start();
