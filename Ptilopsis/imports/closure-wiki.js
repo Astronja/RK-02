@@ -83,7 +83,7 @@ export class closure {
         console.log("Page not found, please check your spelling and check if data is ready");
         console.log("Access URL: ", url.replace("api.", ""));
         console.log("API URL: ", url);
-        return `[ERROR] Page not found with request url: ${url}`;
+        return `[ERROR404] Page not found with request url: ${url}`;
     }
     
     /**
@@ -143,4 +143,4 @@ async function start () {
     console.log(data);
 }
 
-start();
+//start();

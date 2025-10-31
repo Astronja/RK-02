@@ -301,7 +301,7 @@ export class Template {
     static op_dialogue (enname, data) {
         let wikitext = "{{Operator tab}}\n{{Translation|article}}\n{{Operator dialogue head}}\n";
         let footer = `{{Table end}}\n\n[[Category: ${enname}]]\n[[Category: Operator dialogues]]\n`;
-        for (let item of data) wikitext+=`{{Operator dialogue cell2|no=${item.voiceIndex}|dialogue=${item.voiceText}}}\n`;
+        for (let key in data) wikitext+=`{{Operator dialogue cell2|no=${data[key].voiceIndex}|dialogue=${data[key].voiceText}}}\n`;
         return wikitext + footer;
     }
 

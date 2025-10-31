@@ -91,7 +91,7 @@ export class /*GetWiki*/ wiki {
 
 // For testing use only
 async function test () {
-    const request = new GetWiki();
+    //const request = new GetWiki();
     //console.log(await request.getWikiText("Jessica"));
     //console.log(await request.listCategoryMembers("Untranslated"));
     //console.log(await request.getImageURL("Jessica_icon.png"));

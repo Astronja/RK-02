@@ -1,44 +1,45 @@
+import { source } from '../source.js';
+import slugify from 'slugify';
+import { closure } from '../imports/closure-wiki.js';
+import compileTask from '../utils/task-compiler.js';
 import { UpOperator } from './up-opmain.js';
 import { UpOpFile } from './up-opfile.js';
 import { UpOpDialogue } from './up-opdialogue.js';
 import { UpOpGallery } from './up-opgallery.js';
 
-export class Update {
+export class Upload {
     constructor (interaction) {
         this.interaction = interaction;
         this.resultLogs = "";
     }
 
     async execute () {
+        //await this.downloadOperatorData();
         await this.updateProcess(this.interaction);
     }
 
+    async downloadOperatorData () {
+        let data = await closure.getOperator("Akkord");
+        await source.writeOperatorData("Akkord", data);
+        await delay(3000);
+        data = await closure.getOperator("Hadiya");
+        await source.writeOperatorData("Hadiya", data);
+        await delay(3000);
+        data = await closure.getOperator("Snow Hunter");
+        await source.writeOperatorData("Snow Hunter", data);
+        await delay(3000);
+        data = await closure.getOperator("Astgenne the Lightchaser");
+        await source.writeOperatorData("Astgenne the Lightchaser", data);
+        await delay(3000);
+        data = await closure.getOperator("Pramanix the Prerita");
+        await source.writeOperatorData("Pramanix the Prerita", data);
+        await delay(3000);
+        data = await closure.getOperator("SilverAsh the Reignfrost");
+        await source.writeOperatorData("SilverAsh the Reignfrost", data);
+    }
+
     async getTasks () {
-        const wiki = new GetWiki();
-        let list = [];
-        if (this.target == "All") {
-            const cm = await wiki.listCategoryMembers("Operator");
-            for (let item of cm) {
-                list.push({
-                    platform: this.type,
-                    pagename: item.title
-                });
-            }
-        } else if (this.target == "CN") {
-            const cm = await wiki.listCategoryMembers("CN_Operator");
-            for (let item of cm) {
-                list.push({
-                    platform: this.type,
-                    pagename: item.title
-                });
-            }
-        } else {
-            list.push({
-                platform: this.type,
-                pagename: this.target
-            });
-        }
-        return list;
+        return await source.readTasks();
     }
 
     async updateLogs (message) {
@@ -67,7 +68,7 @@ export class Update {
             });
             let success = 0;
             for (var i = 0; i < list.length; i++) {
-                await delay(35000);
+                await delay(5000);
                 const log = `(${i + 1}) ${await this.toIssue(list[i])}`;
                 if (!log.includes("ERROR")) success++;
                 const progress = `(${i + 1}/${list.length})`;
@@ -82,7 +83,7 @@ export class Update {
             const endTime = Date.now();
             await delay(5000);
             await this.updateLogs({ files: [await this.formatLog(`(${success}/${list.length}) item(s) successfully issued.`)] });
-            await this.updateLogs({ files: [await this.formatLog(`Execution completed, process time: ${this.formatTimespanString(startTime, endTime)}`)] });
+            await this.updateLogs({ files: [await this.formatLog(`Execution completed, process time: ${`${Math.floor(Math.round((endTime - startTime) / 1000)/3600)}h${Math.floor((Math.round((endTime - startTime) / 1000)%3600)/60)}m${Math.round((endTime - startTime) / 1000) % 60}s`}`)]});
         } catch (error) {
             console.error(error);
             await this.updateLogs({ files: [await this.formatLog("Execution failed. (Code: -1 Unexpected error)")] });
@@ -90,16 +91,32 @@ export class Update {
         await source.unlinkUpdateLog();
     }
 
+    /**
+     * @param {object} task 
+     * @param {string} task.pagetype
+     * @param {string} task.opname
+     * @param {string} task.pagename
+     * @param {string} task.slug
+     * @param {object} task.data
+     * @returns {Promise<string>} The result log of the issue process.
+     */
     async toIssue (task) {
         try {
-            if (task.platform == "alldata") {
-                const closureResponse = await this.handleClosureTask(task.pagename);
-                const wikiResponse = await this.handleWikiTask(task.pagename);
-                return closureResponse + "\n" + wikiResponse;
-            } else if (task.platform == "gamedata") {
-                return await this.handleClosureTask(task.pagename);
-            } else {
-                return await this.handleWikiTask(task.pagename);
+            switch (task.uploadtype) {
+                //case "operator-main":
+                    //const upmain = new UpOperator(task.opname, task.pagename, task.slug, task.data);
+                    //return await upmain.execute();
+                case "operator_file":
+                    const upfile = new UpOpFile(task.opname);
+                    return await upfile.execute();
+                case "operator_dialogue":
+                    const updialogue = new UpOpDialogue(task.opname);
+                    return await updialogue.execute();
+                case "operator_gallery":
+                    const upgallery = new UpOpGallery(task.opname);
+                    return await upgallery.execute();
+                default:
+                    return `[ERROR] Unknown page type: ${task.pagetype}`;
             }
         } catch (error) {
             console.log(error);
@@ -107,44 +124,22 @@ export class Update {
         }
     }
 
-    async handleClosureTask (name) {
-        try {
-            const closure = new Closure();
-            const result = await closure.getOperator(name);
-            if (typeof(result) == "string") return result;
-            await source.writeOperatorDataClosure(name, result);
-            return `Game data of operator ${name} is updated.`;
-        } catch (err) {
-            return `[ERROR] ${err}`;
-        }
-    }
-
-    async handleWikiTask (name) {
-        try {
-            const wiki = new GetWiki();
-            const result = await wiki.getWikiText(name);
-            if (!result.includes("{{Operator tab}}")) return `[ERROR] Wikitext of operator ${name} is not found or formatted incorrectly.`;
-            await source.writeOperatorWikitext(name, result);
-            return `Wikitext of operator ${name} is updated.`;
-        } catch (err) {
-            return `[ERROR] ${err}`;
-        }
-    }
-
-    getTimeString () {
-        return (new Date()).toTimeString().split(" ")[0];
-    }
-
-    formatTimespanString (start, end) {
-        let timespan = Math.round((end - start) / 1000);
-        return `${Math.floor(timespan/3600)}h${Math.floor((timespan%3600)/60)}m${timespan % 60}s`;
-    }
-
     async formatLog (msg) {
-        const message = this.resultLogs + `[Silence][${this.getTimeString()}] ${msg}`; 
-        this.resultLogs+=`[Silence][${this.getTimeString()}] ${msg}\n`;
+        const message = this.resultLogs + `[Ptilopsis][${(new Date()).toTimeString().split(" ")[0]}] ${msg}`;
+        this.resultLogs+=`[Ptilopsis][${(new Date()).toTimeString().split(" ")[0]}] ${msg}\n`;
         return await source.bufferUpdateLog(message);
     }
 }
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function start () {
+    await compileTask("Akkord");
+    await compileTask("Hadiya");
+    await compileTask("Snow Hunter");
+    await compileTask("Astgenne the Lightchaser");
+    await compileTask("Pramanix the Prerita");
+    await compileTask("SilverAsh the Reignfrost");
+}
+
+//start();

@@ -8,6 +8,7 @@ export class PV {
     }
 
     async execute () {
+        return "This command is not available.";
         await this.parseJSON();
         return "received.";
     }

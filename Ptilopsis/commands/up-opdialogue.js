@@ -1,41 +1,33 @@
 import { Template } from "../utils/template.js";
 import { Editor } from "../imports/editor.js";
-import { Closure } from "../imports/closure-wiki.js";
-import { Source } from "../source.js";
+import { closure } from "../imports/closure-wiki.js";
+import { source } from "../source.js";
+import reference from "../utils/reference.js";
 
 export class UpOpDialogue {
-    /**
-     * 
-     * @param {object} data The data object containing necessary information for uploading operator files.
-     * @param {string} data.cnname The original name (likely Chinese) of the operator whose files are to be uploaded.
-     * @param {string} data.enname The desired page name of the operator. (It is not necessarily English!)
-     */
-    constructor (data) {
-        this.data = data;
+
+    constructor (name) {
+        this.name = name;
     }
     
     async execute () {
         //upload to wiki
-        if (await (new Closure()).writeOperatorData(this.data.enname)) {
-            const data = (await (new Source()).readClosure('operator', this.data.enname)).charDialog;
-            const wikitext = Template.op_dialogue(this.data.enname, data);
-            const editor = new Editor();
-            const editResult = await editor.edit({
-                page_name: `${this.data.enname}/Dialogue`,
-                wikitext: wikitext,
-                summary: `Upload operator dialogues for ${this.data.enname}`,
-            });
-            return `${JSON.stringify(editResult, null, 2)}`;
-        } else return `Found invalid source from closure.wiki when uploading ${this.data.enname}'s dialogues.`;
+        const data = (await source.readOperatorData(this.name)).charWords;
+        const wikitext = Template.op_dialogue(this.name, data);
+        const editor = new Editor();
+        const editResult = await editor.edit({
+            page_name: `${this.name}/Dialogue`,
+            wikitext: wikitext,
+            summary: `Upload operator dialogues for ${this.name}`,
+        });
+        return `${JSON.stringify(editResult)}`;
     }
 }
 
 
 // only for test use
 async function start () {
-    const data = await (new Closure()).getOperator("Haruka");
-    const source = new Source();
-    await source.writeClosure("operator", "Haruka", data);
+    console.log(Template.op_dialogue("Haruka", (await source.readOperatorData("Haruka")).charWords));
 }
 
 //start();

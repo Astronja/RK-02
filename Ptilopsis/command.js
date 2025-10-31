@@ -1,6 +1,6 @@
 import { Ping } from './commands/ping.js';
-import { Queue } from './commands/queue.js';
-import { Refer } from './commands/refer.js';
+//import { Queue } from './commands/queue.js';
+//import { Refer } from './commands/refer.js';
 import { Upload } from './commands/upload.js';
 import { PV } from './commands/pv.js';
 
@@ -49,8 +49,8 @@ export class Command {
     async slashCommandHandler (interaction) {
         switch (interaction.commandName) {
             case 'upload':
-                const uploadCommand = new Upload();
-                uploadCommand.execute(interaction);
+                const uploadCommand = new Upload(interaction);
+                uploadCommand.execute();
         }
     }
 }

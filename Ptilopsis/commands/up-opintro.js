@@ -1,6 +1,7 @@
 import { Template } from "../utils/template.js";
 import { Editor } from "../imports/editor.js";
-import { Source } from "../source.js";
+import { source } from "../source.js";
+import reference from "../utils/reference.js";
 
 export class UpOpIntro {
     constructor (data) {

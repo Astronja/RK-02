@@ -10,6 +10,37 @@ export class source {
     static env (property) {
         return process.env[property];
     }
+
+    static async bufferUpdateLog (logs) {
+        await fs.writeFile(__dirname + "buffers/upload-logs.txt", logs, "utf8");
+        return __dirname + "buffers/upload-logs.txt";
+    }
+
+    static async unlinkUpdateLog () {
+        await fs.unlink(__dirname + "buffers/upload-logs.txt");
+    }
+
+    static async readTasks () {
+        return JSON.parse(await fs.readFile(__dirname + 'tasks.json', 'utf8'));
+    }
+
+    static async pushTask (task) {
+        const tasks = await this.readTasks();
+        if (!tasks.includes(task)) tasks.push(task);
+        await fs.writeFile(__dirname + 'tasks.json', JSON.stringify(tasks, null, 2), 'utf8');
+    }
+
+    static async readReference (rname) {
+        return JSON.parse(await fs.readFile(__dirname + 'reference.json', 'utf8'))[rname];
+    }
+
+    static async readOperatorData (name) {
+        return JSON.parse(await fs.readFile(__dirname + 'operators/' + name + '.json', 'utf8'));
+    }
+
+    static async writeOperatorData (name, data) {
+        await fs.writeFile(__dirname + 'operators/' + name + '.json', JSON.stringify(data, null, 2), 'utf8');
+    }
 }
 
 /* IMMA REWRITE THIS DOGSHIT
