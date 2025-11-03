@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 const baseurl = "https://api.closure.wiki/v2/en/";
-const staticurl = "https://static.closure.wiki/en/";
+const staticurl = "https://static.closure.wiki/v2/";
 
 export class closure {
     /* I AM TURNING EVERY SHIT STATIC THEREFORE SORRY MY CONSTRUCTORS
@@ -16,10 +16,17 @@ export class closure {
     // public methods (for external use)
 
     /**
-     * 
+     * Get the url of the operator thumbnail.
+     * @param {string} charId The character ID of the operator.
+     * @returns {Promise<object>} The url of the operator thumbnail.
      */
-
     static async getOperatorThumbnail (charId) {
+        const response = await fetch(`${staticurl}charavatars/${charId}.png`);
+        if (response.status === 200) {
+            return { ok: true , url: `${staticurl}charavatars/${charId}.png` };
+        } else {
+            return { ok: false, error: `${response.status} ${response.statusText}`, message: `Asset not found on closure.wiki, the parameter was: charavatars/${charId}.png` };
+        }
     }
 
     /**
@@ -144,11 +151,19 @@ export class closure {
     }
 }
 
-
-// only for test use
-async function start () {
-    const data = await closure.getOperator("mrnothing");
-    console.log(data);
+class Respuesta {
+    constructor (response) {
+        this.ok = response.ok;
+        this.url = response.url;
+        this.parameter = this.url.replace(baseurl, '').replace(staticurl, '');
+        this.domain = this.url.replace(this.parameter, '');
+        if (response.status != 400) this.error = `${response.status} ${response.statusText}`;
+    }
 }
 
-//start();
+const returnResponse = async (response) => {
+    let result = {};
+    
+}
+
+export default closure;
