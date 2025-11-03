@@ -34,6 +34,12 @@ export class source {
         return JSON.parse(await fs.readFile(__dirname + 'reference.json', 'utf8'))[rname];
     }
 
+    static async writeReference (rname, data) {
+        const file = JSON.parse(await fs.readFile(__dirname + 'reference.json', 'utf8'));
+        file[rname] = data;
+        await fs.writeFile(__dirname + 'reference.json', JSON.stringify(file, null, 2), 'utf8');
+    }
+
     static async readOperatorData (name) {
         return JSON.parse(await fs.readFile(__dirname + 'operators/' + name + '.json', 'utf8'));
     }

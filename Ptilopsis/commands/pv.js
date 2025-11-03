@@ -1,5 +1,6 @@
 import { Editor } from '../imports/editor.js';
 import { Template } from '../utils/template.js';
+import { source } from '../source.js';
 
 export class PV {
     constructor (command, url) {
@@ -9,12 +10,11 @@ export class PV {
 
     async execute () {
         return "This command is not available.";
-        await this.parseJSON();
+        await this.parseData();
         return "received.";
     }
 
-    async parseJSON () {
-        console.log(this.url);
+    async parseData () {
         const json = await fetch(this.url);
         const object = await json.json();
         this.data = object;

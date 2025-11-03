@@ -1,5 +1,6 @@
 import slugify from 'slugify';
 const baseurl = "https://api.closure.wiki/v2/en/";
+const staticurl = "https://static.closure.wiki/en/";
 
 export class closure {
     /* I AM TURNING EVERY SHIT STATIC THEREFORE SORRY MY CONSTRUCTORS
@@ -13,6 +14,13 @@ export class closure {
     */
 
     // public methods (for external use)
+
+    /**
+     * 
+     */
+
+    static async getOperatorThumbnail (charId) {
+    }
 
     /**
      * Gets data of operator by page name.

@@ -5,11 +5,11 @@ A nodejs-based discord bot, providing services regarding the Arknights Terra Wik
 
 **2025**
 
-*SEPTEMBER~ Patch Cycle*
+*OCTOBER~ Patch Cycle*
 + ➕Operator Introduction
 + ➕Operator File
 
-*OCTOBER Patch Cycle*
+*NOVEMBER Patch Cycle*
 + ➕Operator Dialogue
 + ➕Operator Gallery
 + ➕Operator Main Page

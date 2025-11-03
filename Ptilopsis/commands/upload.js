@@ -91,15 +91,6 @@ export class Upload {
         await source.unlinkUpdateLog();
     }
 
-    /**
-     * @param {object} task 
-     * @param {string} task.pagetype
-     * @param {string} task.opname
-     * @param {string} task.pagename
-     * @param {string} task.slug
-     * @param {object} task.data
-     * @returns {Promise<string>} The result log of the issue process.
-     */
     async toIssue (task) {
         try {
             switch (task.uploadtype) {
