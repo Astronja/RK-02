@@ -1,10 +1,12 @@
-// THIS FILE IS NOT WORKING!
-
 import fs from 'fs/promises';
 import { JSDOM } from 'jsdom';
 import pkg from 'js-beautify';
 const { html } = pkg;
 
+/** 
+ * THIS FILE IS NOT WORKING!
+ * @deprecated October 2025
+ */ 
 export class HGNews {
     constructor (newsID) {
         this.newsID = newsID;

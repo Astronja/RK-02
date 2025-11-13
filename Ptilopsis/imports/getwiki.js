@@ -1,11 +1,6 @@
 const url = 'https://arknights.wiki.gg/api.php?';
 
 export class /*GetWiki*/ wiki {
-    /* I AM TURNING EVERY SHIT STATIC THEREFORE SORRY MY CONSTRUCTORS
-    constructor () {
-        this.url = 'https://arknights.wiki.gg/api.php?';
-    }
-    */
 
     static async getWikiText (page_name) {
         const params = {
@@ -44,14 +39,14 @@ export class /*GetWiki*/ wiki {
     
     static async getImageURL (file_name) {
         
-        let fn = file_name;
+        let fn = file_name.replace(".png", "");
         if (!file_name.startsWith('File:')) {
-            fn = 'File:' + file_name;
+            fn = 'File:' + fn;
         }
         const params = {
             action: 'query',
             prop: 'imageinfo',
-            titles: fn,
+            titles: fn + ".png",
             iiprop: 'url',
             format: 'json'
         }
@@ -74,16 +69,15 @@ export class /*GetWiki*/ wiki {
         if (response.error) {
             return response.error.info;
         } else {
-            const properties = response.parse.properties;
             let result = {};
-            for (let item of properties) {
+            for (let item of response.parse.properties) {
                 if (item.name == 'description') {
                     result.desc = item['*'];
                 } else if (item.name == 'page_image_free') {
+                    console.log(item['*']);
                     result.thumbnail = await this.getImageURL(item['*']);
                 }
             }
-            console.log(result);
             return result;
         }
     }
@@ -91,9 +85,7 @@ export class /*GetWiki*/ wiki {
 
 // For testing use only
 async function test () {
-    //const request = new GetWiki();
-    //console.log(await request.getWikiText("Jessica"));
-    //console.log(await request.listCategoryMembers("Untranslated"));
-    //console.log(await request.getImageURL("Jessica_icon.png"));
-    //console.log(await request.getInfo("Jessica"));
+    console.log(await wiki.getInfo("Pramanix"));
 }
+
+//test();

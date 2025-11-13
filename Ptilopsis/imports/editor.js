@@ -70,7 +70,7 @@ export class Editor {
     }
 
     /**
-     * 
+     * Upload file to wiki.
      * @param {string} file_name The name of the file to be uploaded.
      * @param {string} file_url The url of a file that is publicly accessible.
      */
