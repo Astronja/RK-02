@@ -1,6 +1,4 @@
 import { Ping } from './commands/ping.js';
-//import { Queue } from './commands/queue.js';
-//import { Refer } from './commands/refer.js';
 import { Upload } from './commands/upload.js';
 import { PV } from './commands/pv.js';
 

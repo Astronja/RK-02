@@ -78,18 +78,23 @@ export async function edit (data) {
 export async function upload (file_name, file_url) {
     try {
         await login();
-        await setCookies();
+        await delay();
         const uploadToken = await getToken('csrf');
+        await delay();
         const params = {
             action: 'upload',
             format: 'json',
-            filename: file_name,
+            filename: file_name.replace("File:", ""),
             url: file_url,
             token: uploadToken,
+            ignorewarnings: 1
         }
-        const response = await fetch(baseUrl + "?", {
+        const temp = {
+            token: uploadToken
+        }
+        const response = await fetch(baseUrl + "?" + new URLSearchParams(params), {
             method: 'POST',
-            body: new URLSearchParams(params),
+            body: temp,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Cookie': cookies,
@@ -104,17 +109,62 @@ export async function upload (file_name, file_url) {
                 'Sec-Fetch-Site': 'same-origin'
             }
         });
+        console.log(response);
         const result = await response.json();
         if (result.upload && result.upload.result === 'Success') {
             console.log(`Upload successful: ${file_name}`);
         }
         return result;
     } catch (err) {
-        
+        console.error(err);
     }
 }
 
-
+/**
+ * Remove an existing page on wiki.
+ * @param {string} page_name The certain wiki page name on wiki.
+ * @param {string} reason The reason why this page/file is tend to be removed.
+ */
+export async function remove (page_name, reason) {
+    try {
+        await login();
+        await delay();
+        const csrfToken = await getToken('csrf');
+        await delay();
+        const params = {
+            action: "delete",
+            title: page_name,
+            reason: reason,
+            token: csrfToken,
+            format: "json"
+        }
+        const temp = {
+            token: csrfToken
+        }
+        const response = await fetch(baseUrl + "?" + new URLSearchParams(params), {
+            method: 'POST',
+            body: temp,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Cookie': cookies,
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+                'Origin': 'https://arknights.wiki.gg',
+                'Referer': 'https://arknights.wiki.gg/wiki/Special:Upload',
+                'Accept': 'application/json, */*',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-origin'
+            }
+        });
+        console.log(response);
+        const result = await response.json();
+        return result;
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 async function login () {
     await setCookies();
@@ -208,11 +258,16 @@ async function getToken (type) {
 
 // only for test use
 async function test () {
+    /*
     await edit({
         page_name: "User:Ptilopsis",
         wikitext: "Hello World from editor.js v2.",
         summary: "[Ptilopsis]"
-    });
+    });*/
+    const response1 = await upload("Ptilopsis_Closure_wiki.png", "https://static.closure.wiki/v1/icon.png");
+    const response2 = await remove("Ptilopsis_Closure_wiki.png", "Deleted for testing reasons");
+    console.log(response1);
+    console.log(response2);
 }
 
 test();

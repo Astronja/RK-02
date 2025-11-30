@@ -1,7 +1,6 @@
 import { Template } from "../utils/template.js";
-import { Editor } from "../imports/editor.js";
+import { edit } from "../imports/editor.js";
 import { source } from "../source.js";
-import reference from "../utils/reference.js";
 
 export class UpOpIntro {
     constructor (data) {
@@ -11,11 +10,9 @@ export class UpOpIntro {
     async execute () {
         //upload to wiki
         const result = Template.op_intro(this.data);
-        const source = new Source();
         if (await source.readReference(result.name) != undefined) {
             const enOpName = await source.readReference(result.name);
-            const editor = new Editor();
-            const editResult = await editor.edit({
+            const editResult = await edit({
                 page_name: `${enOpName}/File`,
                 wikitext: result.wikitext,
                 summary: `Upload operator introduction for ${result.name}`,

@@ -1,8 +1,6 @@
 import { Template } from "../utils/template.js";
-import { Editor } from "../imports/editor.js";
-import { closure } from "../imports/closure-wiki.js";
+import { edit } from "../imports/editor.js";
 import { source } from "../source.js";
-import reference from "../utils/reference.js";
 
 export class UpOpDialogue {
 
@@ -14,8 +12,7 @@ export class UpOpDialogue {
         //upload to wiki
         const data = (await source.readOperatorData(this.name)).charWords;
         const wikitext = Template.op_dialogue(this.name, data);
-        const editor = new Editor();
-        const editResult = await editor.edit({
+        const editResult = await edit({
             page_name: `${this.name}/Dialogue`,
             wikitext: wikitext,
             summary: `Upload operator dialogues for ${this.name}`,

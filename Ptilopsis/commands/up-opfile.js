@@ -1,6 +1,5 @@
 import { Template } from "../utils/template.js";
-import { Editor } from "../imports/editor.js";
-import reference from "../utils/reference.js";
+import { edit } from "../imports/editor.js";
 import { source } from "../source.js";
 import { wiki } from "../imports/getwiki.js";
 
@@ -20,8 +19,7 @@ export class UpOpFile {
         const original = await wiki.getWikiText(`${this.name}/File`);
         const data = (await source.readOperatorData(this.name)).handbookInfo.storyTextAudio;
         const wikitext = Template.op_file(data, original, this.name);
-        const editor = new Editor();
-        const editResult = await editor.edit({
+        const editResult = await edit({
             page_name: `${this.name}/File`,
             wikitext: wikitext,
             summary: `Upload operator archives for ${this.name}`,
@@ -33,7 +31,7 @@ export class UpOpFile {
 
 // only for test use
 async function start () {
-    console.log(await reference("协律"));
+
 }
 
 //start();
