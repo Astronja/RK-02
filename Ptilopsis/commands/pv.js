@@ -1,6 +1,6 @@
 import { edit } from '../imports/editor.js';
-import { Template } from '../utils/template.js';
-import { source } from '../source.js';
+import template from '../utils/template.js';
+import source from '../source.js';
 
 export class PV {
     constructor (command, url) {

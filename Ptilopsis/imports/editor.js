@@ -1,4 +1,4 @@
-import { source } from '../source.js';
+import source from '../source.js';
 
 const baseUrl = 'https://arknights.wiki.gg/api.php';
 
@@ -270,4 +270,4 @@ async function test () {
     console.log(response2);
 }
 
-test();
+//test();

@@ -1,6 +1,6 @@
-import { Template } from "../utils/template.js";
-import { edit } from "../imports/editor.js";
-import { source } from "../source.js";
+import { edit } from '../imports/editor.js';
+import template from '../utils/template.js';
+import source from '../source.js';
 
 export class UpOpDialogue {
 
@@ -11,7 +11,7 @@ export class UpOpDialogue {
     async execute () {
         //upload to wiki
         const data = (await source.readOperatorData(this.name)).charWords;
-        const wikitext = Template.op_dialogue(this.name, data);
+        const wikitext = template.op_dialogue(this.name, data);
         const editResult = await edit({
             page_name: `${this.name}/Dialogue`,
             wikitext: wikitext,

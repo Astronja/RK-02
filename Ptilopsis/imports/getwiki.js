@@ -1,6 +1,6 @@
 const url = 'https://arknights.wiki.gg/api.php?';
 
-export class /*GetWiki*/ wiki {
+export default class /*GetWiki*/ wiki {
 
     static async getWikiText (page_name) {
         const params = {

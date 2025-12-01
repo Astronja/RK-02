@@ -1,4 +1,4 @@
-export class Template {
+export default class template {
     /**
      * Initialization of ~/OPERATOR page.
      * @param {object} data The data regarding the operator

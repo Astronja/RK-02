@@ -1,4 +1,4 @@
-import { source } from "../source.js";
+import source from "../source.js";
 
 export default async function compileTask (operator) {
     /*

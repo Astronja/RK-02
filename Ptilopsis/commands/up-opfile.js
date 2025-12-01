@@ -1,7 +1,7 @@
-import { Template } from "../utils/template.js";
-import { edit } from "../imports/editor.js";
-import { source } from "../source.js";
-import { wiki } from "../imports/getwiki.js";
+import { edit } from '../imports/editor.js';
+import template from '../utils/template.js';
+import source from '../source.js';
+import wiki from "../imports/getwiki.js";
 
 export class UpOpFile {
     /**
@@ -18,7 +18,7 @@ export class UpOpFile {
         //upload to wiki
         const original = await wiki.getWikiText(`${this.name}/File`);
         const data = (await source.readOperatorData(this.name)).handbookInfo.storyTextAudio;
-        const wikitext = Template.op_file(data, original, this.name);
+        const wikitext = template.op_file(data, original, this.name);
         const editResult = await edit({
             page_name: `${this.name}/File`,
             wikitext: wikitext,

@@ -15,7 +15,7 @@ import slugify from 'slugify';
 const apiurl = "https://api.closure.wiki/v2/en/";
 const staticurl = "https://static.closure.wiki/v2/";
 
-class closure {
+export default class closure {
     /**
      * Get the url of the module image.
      * @param {string} moduleId The moduleId of the module.
@@ -228,5 +228,3 @@ const handleResponse = async (response, dataType) => {
     }
     return result;
 }
-
-export default closure;

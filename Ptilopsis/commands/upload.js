@@ -1,5 +1,4 @@
-import { source } from '../source.js';
-import slugify from 'slugify';
+import source from '../source.js';
 import closure from '../imports/closure-wiki.js';
 import compileTask from '../utils/task-compiler.js';
 import { UpOperator } from './up-opmain.js';

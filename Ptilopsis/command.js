@@ -1,5 +1,6 @@
 import { Ping } from './commands/ping.js';
 import { Upload } from './commands/upload.js';
+import { Refer } from './commands/refer.js';
 import { PV } from './commands/pv.js';
 
 export class Command {
@@ -33,9 +34,6 @@ export class Command {
             case 'refer':
                 const referCommand = new Refer(command);
                 return await referCommand.execute();
-            case 'queue':
-                const queueCommand = new Queue(command);
-                return await queueCommand.execute();
             case 'pv':
                 const pvCommand = new PV(command);
                 return await pvCommand.execute();

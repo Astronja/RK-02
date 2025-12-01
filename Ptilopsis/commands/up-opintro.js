@@ -1,6 +1,6 @@
-import { Template } from "../utils/template.js";
-import { edit } from "../imports/editor.js";
-import { source } from "../source.js";
+import { edit } from '../imports/editor.js';
+import template from '../utils/template.js';
+import source from '../source.js';
 
 export class UpOpIntro {
     constructor (data) {
@@ -9,7 +9,7 @@ export class UpOpIntro {
 
     async execute () {
         //upload to wiki
-        const result = Template.op_intro(this.data);
+        const result = template.op_intro(this.data);
         if (await source.readReference(result.name) != undefined) {
             const enOpName = await source.readReference(result.name);
             const editResult = await edit({
