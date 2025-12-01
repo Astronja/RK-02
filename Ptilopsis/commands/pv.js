@@ -1,4 +1,4 @@
-import { Editor } from '../imports/editor.js';
+import { edit } from '../imports/editor.js';
 import { Template } from '../utils/template.js';
 import { source } from '../source.js';
 
