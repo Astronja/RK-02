@@ -20,3 +20,11 @@ export default async function compileTask (operator) {
         opname: operator,
     });
 }
+
+async function start () {
+    await compileTask("Cairn");
+    await compileTask("Skybox");
+    await compileTask("Nasti");
+}
+
+//start();

@@ -2,13 +2,16 @@ export default class template {
     /**
      * Initialization of ~/OPERATOR page.
      * @param {object} data The data regarding the operator
-     * @param {boolean} init True if creating page
+     * @param {boolean} init True if creating page.
+     * @param {string} enname The page name of the operator (usually English).
      */
-    static op_main (data, init) {
-        const wikitextList = [];
+    static op_main (data, init, enname) {
+        //Header and basic information
+        let wikitextList = [];
+        
         const header = "{{Operator notice|unreleased}}";
         wikitextList.push(header);
-        const info = formatCell({
+        const opinfo = formatCell({
             name: "Operator info",
             content: {
                 /**
@@ -16,68 +19,74 @@ export default class template {
                  * (e.g. Snegurochka)
                  * Provided in: INITIAL
                  */
-                name: "Snegurochka",
+                name: enname,
                 //catname: "", // this is probably deprecated
                 /**
                  * operator's profession
                  * (e.g. Vanguard)
                  * Provided in: INITIAL
                  */
-                class: "Vanguard",
+                class: convertProfessionName(data.character.profession),
                 /**
                  * operator's profession branch
                  * (e.g. Agent)
                  * Provided in: INITIAL
                  */
-                branch: "Agent",
+                branch: data.character.subProfessionId,
                 /**
                  * operator's faction
                  * (e.g. Rhodes Island)
                  * Provided in: INITIAL
                  */
-                faction: "Ursus",
+                faction: data.character.nationId,
                 /**
                  * operator's rarity
                  * (e.g. 4)
                  * Provided in: INITIAL
                  */
-                rarity: 4,
+                rarity: data.character.rarity.replace("TIER_", ""),
                 /**
                  * operator's position
                  * (e.g. Melee)
                  * Provided in: INITIAL
                  */
-                position: "Melee",
+                position: data.character.position,
                 /**
                  * operator's tags
                  * (e.g. DP-Recovery, Fast-Redeploy)
                  * Provided in: RELEASE
                  */
-                tags: "DP-Recovery, Fast-Redeploy",
+                tags: data.character.tagList.join(", "),
                 /**
                  * operator's trait
                  * (e.g. DP-Recovery, Fast-Redeploy)
                  * Provided in: RELEASE
                  */
-                trait: "Has {{Color|reduced|kw}} Redeployment Time, can use ranged attacks",
+                trait: data.character.description,
                 /**
                  * operator's available headhunting banner
                  * (e.g. standard cn)
                  * Provided in: INITIAL
                  */
-                headhunting: "standard cn",
+                headhunting: "",
+                /**
+                 * operator's release event
+                 * (e.g. "Ato")
+                 * Provided in: INITIAL
+                 */
+                event: "",
                 /**
                  * operator's description (do not mix up with trait)
                  * (e.g. "Vanguard Operator Snegurochka treats every data with utmost care.")
                  * Provided in: RELEASE
                  */
-                desc: "Vanguard Operator Snegurochka treats every data with utmost care.",
+                desc: data.character.itemUsage,
                 /**
                  * opeartor's quote (in game) 
                  * (e.g. "Not every problem in the world has solution, but she tries to look for one.")
                  * Provided in: RELEASE
                  */
-                quote: "Not every problem in the world has solution, but she tries to look for one.",
+                quote: data.character.itemDesc,
                 /**
                  * true if this operator is explicit to cn server
                  * (e.g. true)
@@ -86,27 +95,35 @@ export default class template {
                 cn: true
             }
         });
-        wikitextList.push(info);
+
+        
+
+        wikitextList.push(opinfo);
         const optab = "{{Operator tab}}";
         wikitextList.push(optab);
-        const infobox = formatCell({
+        const opnotice = "{{Operator notice}}";
+        wikitextList.push(opnotice);
+
+        
+
+        const opinfobox = formatCell({
             name: "Operator infobox",
             content: {
                 /**
                  * operator's English or romanized name, usually same with the page name
                  * Provided in: INITIAL
                  */
-                name: "Snegurochka", 
+                name: enname, 
                 /**
                  * pronounciation of the name
                  * Provided in: MANUAL
                  */
-                pronunc: "[[wikipedia:Help:IPA/Russian/|/sʲnʲɪˈɡurət͡ɕkə, sʲnʲɪˈɡurkə/]]",
+                pronunc: "",
                 /**
                  * rarity, in format of `${num}star`
                  * Provided in: INITIAL
                  */
-                rarity: "4star",
+                rarity: `${data.character.rarity.replace("TIER_", "")}star`,
                 /**
                  * since this page will be created before opeartor is officially released, this part will be commented out to avoid exceptions
                  * Provided in: INITIAL
@@ -116,12 +133,12 @@ export default class template {
                  * operator's cn name
                  * Provided in: INITIAL
                  */
-                cnname: "冬时",
+                cnname: data.character.name,
                 /**
                  * since usually the operator's name is already in English, this is not commonly used
                  * Provided in: INITIAL
                  */
-                enname: "Snegurochka",
+                enname: enname,
                 /**
                  * operator's japanese name
                  * Provided in: MANUAL
@@ -136,7 +153,7 @@ export default class template {
                  * operator realname
                  * Provided in: MANUAL
                  */
-                realname: "{{Names|text=Ksenia Markovna Nelyudova|cn=科谢尼娅·马尔科芙娜·涅留朵娃}}",
+                realname: "",
                 /**
                  * operator's nickname (or alternative one)
                  * Provided in: MANUAL
@@ -151,38 +168,38 @@ export default class template {
                  * operator's basis, usually animals
                  * Provided in: MANUAL
                  */
-                basis: "[[wikipedia:Daurian jackdaw|Daurian jackdaw]] (''Coloeus dauuricus'')",
+                basis: "",
                 /**
                  * operator's name's etymology
                  * Provided in: MANUAL
                  */
-                etymology: "[[wikipedia:Snegurochka|Snegurochka in Russian fairy tales]]",
+                etymology: "",
                 /**
                  * operator's in-game code
                  * Provided in: RELEASE
                  */
-                filename: "char_4208_wintim",
+                filename: data.summary.id,
                 /**
                  * operator's archive code
                  * Provided in: RELEASE
                  */
-                fileno: "US38",
+                fileno: data.character.displayNumber,
                 //appearance: "", // deprecated
                 /**
                  * illustrator of the operator
                  * Provided in: INITIAL
                  */
-                illustrator: "3MO",
+                illustrator: data.charSkins[Object.keys(data.charSkins)[0]].displaySkin.drawerList.join(", "),
                 /**
                  * operator's Japanese voice
                  * Provided in: INITIAL
                  */
-                jpcv: "Saya Hitomi",
+                jpcv: data.voiceLangDict.dict.JP.cvName.join(""),
                 /**
                  * operator's Mandarin voice
                  * Provided in: INITIAL
                  */
-                cncv: "Wang Yaxin",
+                cncv: data.voiceLangDict.dict.CN_MANDARIN.cvName.join(""),
                 /**
                  * operator's English voice
                  * Provided in: MANUAL
@@ -197,7 +214,7 @@ export default class template {
                  * operator's gender
                  * Provided in: INITIAL
                  */
-                gender: "Female",
+                gender: "",
                 /**
                  * operator's battling experience, measured in time.
                  * Provided in: RELEASE
@@ -260,21 +277,433 @@ export default class template {
                 originium: ""
             }
         });
-        wikitextList.push(infobox);
-        const summary = "'''Snegurochka''' is a [[4-star|4★]] [[Ursus|Ursine]] [[Agent Vanguard]] [[Operator]] in ''[[Arknights]]'', introduced in [[Abnormal Spectrum]]."
+
+        
+
+        wikitextList.push(opinfobox);
+        const opsummary = "'''Snegurochka''' is a [[4-star|4★]] [[Ursus|Ursine]] [[Agent Vanguard]] [[Operator]] in ''[[Arknights]]'', introduced in [[Abnormal Spectrum]]."
         // const summary = '''{{subst:#titleparts:{{subst:PAGENAME}}}}''' is a [[-star|★]] [[]] [[]] [[Operator]] in ''[[Arknights]]'', introduced in [[]].
         // ⬆️ this is the one provided in the boiler template.
-        wikitextList.push(summary);
+        wikitextList.push(opsummary);
+        
+        
+
+        //Statistics
+        wikitextList.push("\n==Stats==");
+        // This is to shown segments of statistics cell, created for convenience.
+        /* THIS IS NOT HOW `statistics` is "structured" in terms of programming, the more important is the sequence shown!
+        let statistics = {
+            RANGE: {},
+            HAD: {},
+            RES: {},
+            RDP: {},
+            COST: {},
+            BLOCK: {},
+            ITVL: {},
+            POT: {},
+            E1: {},
+            E2: {}
+        }
+        */
+        let statistics = {};
+
+        //Ranges
+        let ranges = {};
+        let rangesByPhases = [];
+        for (let item of data.character.phases) rangesByPhases.push(item.rangeId);
+        let identicalRange = true;
+        for (let i = 0; i < rangesByPhases.length - 1; i++) if (rangesByPhases[i] != rangesByPhases[i+1]) identicalRange = false;
+        if (identicalRange) {
+            ranges["range"] = getRange(rangesByPhases[0]);
+        } else {
+            if (rangesByPhases[0] != rangesByPhases[1]) {
+                for (let i = 0; i < rangesByPhases.length; i++) {
+                    ranges[`range${i}`] = getRange(rangesByPhases[i]);
+                }
+            }
+        }
+        if (data.character.subProfessionId == "healer") ranges["range note"] = `The red squares mark the tiles where Therapists' healing is reduced due to their trait.`;
+        for (let key in ranges) statistics[key] = ranges[key];
+
+        //Collection data of Health Point, Attack, Defense, Art Resistence, Cost, Block Count
+        let HADRCB = [];
+        for (let i = 0; i < data.character.phases.length; i++) {
+            if (i == 0) {
+                HADRCB.push({
+                    h: data.character.phases[i].attributesKeyFrames[0].data.maxHp,
+                    a: data.character.phases[i].attributesKeyFrames[0].data.atk,
+                    d: data.character.phases[i].attributesKeyFrames[0].data.def,
+                    r: data.character.phases[i].attributesKeyFrames[0].data.magicResistance,
+                    c: data.character.phases[i].attributesKeyFrames[0].data.cost,
+                    b: data.character.phases[i].attributesKeyFrames[0].data.blockCnt,
+                });
+            }
+            HADRCB.push({
+                h: data.character.phases[i].attributesKeyFrames[data.character.phases[i].attributesKeyFrames.length - 1].data.maxHp,
+                a: data.character.phases[i].attributesKeyFrames[data.character.phases[i].attributesKeyFrames.length - 1].data.atk,
+                d: data.character.phases[i].attributesKeyFrames[data.character.phases[i].attributesKeyFrames.length - 1].data.def,
+                r: data.character.phases[i].attributesKeyFrames[data.character.phases[i].attributesKeyFrames.length - 1].data.magicResistance,
+                c: data.character.phases[i].attributesKeyFrames[data.character.phases[i].attributesKeyFrames.length - 1].data.cost,
+                b: data.character.phases[i].attributesKeyFrames[data.character.phases[i].attributesKeyFrames.length - 1].data.blockCnt
+            });
+        }
+
+        //Trust data
+        let trust = {
+            h: data.character.favorKeyFrames[data.character.favorKeyFrames.length - 1].data.maxHp,
+            a: data.character.favorKeyFrames[data.character.favorKeyFrames.length - 1].data.atk,
+            d: data.character.favorKeyFrames[data.character.favorKeyFrames.length - 1].data.def,
+            r: data.character.favorKeyFrames[data.character.favorKeyFrames.length - 1].data.magicResistance,
+        };
+
+        //Health Point
+        let HP = {};
+        for (let i = 0; i < HADRCB.length; i++) {
+            if (i == 0) {
+                HP['hp0'] = `${HADRCB[0].h}, ${HADRCB[1].h}`;
+                i++;
+            } else {
+                HP[`hp${i-1}`] = HADRCB[i].h;
+            }
+        }
+        if (trust.h > 0) HP['hp trust'] = trust.h;
+        for (let key in HP) statistics[key] = HP[key];
+
+        //Attack
+        let ATK = {};
+        for (let i = 0; i < HADRCB.length; i++) {
+            if (i == 0) {
+                ATK['atk0'] = `${HADRCB[0].a}, ${HADRCB[1].a}`;
+                i++;
+            } else {
+                ATK[`atk${i-1}`] = HADRCB[i].a;
+            }
+        }
+        if (trust.a > 0) ATK['atk trust'] = trust.a;
+        for (let key in ATK) statistics[key] = ATK[key];
+
+        //Defense
+        let DEF = {};
+        for (let i = 0; i < HADRCB.length; i++) {
+            if (i == 0) {
+                DEF['def0'] = `${HADRCB[0].d}, ${HADRCB[1].d}`;
+                i++;
+            } else {
+                DEF[`def${i-1}`] = HADRCB[i].d;
+            }
+        }
+        if (trust.d > 0) DEF['def trust'] = trust.d;
+        for (let key in DEF) statistics[key] = DEF[key];
+
+        //Art Resistence
+        let RES = {};
+        let identicalRES = true;
+        for (let i = 0; i < HADRCB.length - 1; i++) if (HADRCB[i].r != HADRCB[i+1].r) identicalRES = false;
+        if (identicalRES) {
+            RES['res'] = HADRCB[0].r;
+        } else {
+            for (let i = 0; i < HADRCB.length; i++) {
+                RES[`res${i}`] = HADRCB[i].r;
+            }
+        }
+        if (trust.r > 0) RES['res trust'] = trust.r;
+        for (let key in RES) statistics[key] = RES[key];
+
+        //Redeployment Time
+        let RDP = { rdp: data.character.phases[0].attributesKeyFrames[0].data.respawnTime };
+        for (let key in RDP) statistics[key] = RDP[key];
+
+        //Deployment Costs
+        let costs = {};
+        for (let i = 0; i < HADRCB.length; i++) {
+            costs[`cost${i}`] = HADRCB[i].c;
+        }
+        for (let key in costs) statistics[key] = costs[key];
+
+        //Block Counts
+        let blocks = {};
+        for (let i = 0; i < HADRCB.length; i++) {
+            blocks[`block${i}`] = HADRCB[i].b;
+        }
+        for (let key in blocks) statistics[key] = blocks[key];
+
+        //Attack Interval
+        let ITVL = { itvl: data.character.phases[0].attributesKeyFrames[0].data.baseAttackTime };
+        for (let key in ITVL) statistics[key] = ITVL[key];
+
+        //Potentials
+        function readPotentialTranslation (desc) { 
+            if (desc.startsWith("部署费用")) return `[[DP]] cost {{Color|${desc.replace("部署费用", "").trim()}}}`;
+            if (desc.startsWith("再部署时间")) return `Redeployment time {{Color|${desc.replace("再部署时间", "").replace("秒", "").trim()} seconds}}`;
+            if (desc.startsWith("生命上限")) return `Max HP {{Color|${desc.replace("生命上限", "").trim()}}}`;
+            if (desc.startsWith("攻击力")) return `ATK {{Color|${desc.replace("攻击力", "").trim()}}}`;
+            if (desc.startsWith("攻击速度")) return `ASPD {{Color|${desc.replace("攻击速度", "").trim()}}}`;
+            if (desc.startsWith("防御力")) return `DEF {{Color|${desc.replace("防御力", "").trim()}}}`;
+            if (desc.startsWith("法术抗性")) return `RES {{Color|${desc.replace("法术抗性", "").trim()}}}`;
+            if (desc.includes("天赋效果增强")) {
+                if (desc.includes("一")) {
+                    return `Improves [[#Talent|${data.character.talents[0].candidates[0].name}]]`;
+                } else if (desc.includes("二")) {
+                    return `Improves [[#Talent|${data.character.talents[1].candidates[0].name}]]`;
+                } else {
+                    return `Improves [[#Talent|${data.character.talents[0].candidates[0].name}]]`;
+                }
+            }
+            return desc;
+        }
+        let potential = {};
+        for (let i = 0; i < data.character.potentialRanks.length; i++) potential[`pot${i+2}`] = readPotentialTranslation(data.character.potentialRanks[i].description);
+        if (data.potentialItem != null) {
+            potential['pot rarity'] = data.potentialItem.rarity.replace("TIER_", "");
+            potential['pot class'] = convertProfessionName(data.character.profession);
+        }
+        if (!data.canUseGeneralPotentialItem && data.canUseActivityPotentialItem) potential['folder'] = true;
+        for (let key in potential) statistics[key] = potential[key];
+
+        //Elite 1
+        if (data.character.phases[1]) {
+            let elite1 = {};
+            let e1upgradeSummary = "\n*Maximum attributes increased.";
+            //DP
+            if (data.character.phases[1].attributesKeyFrames[0].data.cost != data.character.phases[0].attributesKeyFrames[0].data.cost) {
+                e1upgradeSummary+=`[[DP]] cost {{Color|+${data.character.phases[1].attributesKeyFrames[0].data.cost - data.character.phases[0].attributesKeyFrames[0].data.cost}|down}}.`;
+            }
+            //Talents
+            for (let talent of data.character.talents) {
+                for (let i = 0; i < talent.candidates.length; i++) {
+                    if (talent.candidates[i].unlockCondition.phase == "PHASE_1" && talent.candidates[i].requiredPotentialRank == 0) {
+                        if (i == 0) {
+                            e1upgradeSummary+=`\n*New talent: '''${talent.candidates[i].name}'''.`;
+                        } else {
+                            e1upgradeSummary+=`\n*'''${talent.candidates[i].name}''' improved.`;
+                        }
+                    }
+                }
+            }
+            //Skills
+            for (let item of data.character.skills) {
+                if (item.unlockCond.phase == "PHASE_1") {
+                    e1upgradeSummary+=`\n*New skill: '''${data.charSkills[item.skillId].levels[0].name}'''.`
+                }
+            }
+            //Range
+            if (data.character.phases[1].rangeId != data.character.phases[0].rangeId) {
+                e1upgradeSummary+=`\n*Range extended.`;
+            }
+            elite1['e1'] = e1upgradeSummary;
+            elite1['e1 level'] = data.character.phases[0].attributesKeyFrames[1].level;
+            switch (data.character.phases[1].attributesKeyFrames[1].level) {
+                case 55:
+                    elite1['e1 lmd'] = 10000;
+                    break;
+                case 60:
+                    elite1['e1 lmd'] = 15000;
+                    break;
+                case 70:
+                    elite1['e1 lmd'] = 20000;
+                    break;
+                case 80:
+                    elite1['e1 lmd'] = 30000;
+                    break;
+            }
+            for (let i = 0; i < data.character.phases[1].evolveCost.length; i++) {
+                elite1[`e1 m${i}`] = `${data.character.phases[1].evolveCost[i].id}, ${data.character.phases[1].evolveCost[i].count}`;
+            }
+            for (let key in elite1) statistics[key] = elite1[key];
+        }
+
+        //Elite 2
+        if (data.character.phases[2]) {
+            let elite2 = {};
+            let e2upgradeSummary = "\n*Maximum attributes increased.";
+            //DP
+            if (data.character.phases[2].attributesKeyFrames[0].data.cost != data.character.phases[1].attributesKeyFrames[0].data.cost) {
+                e2upgradeSummary+=`[[DP]] cost {{Color|+${data.character.phases[2].attributesKeyFrames[0].data.cost - data.character.phases[1].attributesKeyFrames[0].data.cost}|down}}.`;
+            }
+            //Talents
+            for (let talent of data.character.talents) {
+                for (let i = 0; i < talent.candidates.length; i++) {
+                    if (talent.candidates[i].unlockCondition.phase == "PHASE_2" && talent.candidates[i].requiredPotentialRank == 0) {
+                        if (i == 0) {
+                            e2upgradeSummary+=`\n*New talent: '''${talent.candidates[i].name}'''.`;
+                        } else {
+                            e2upgradeSummary+=`\n*'''${talent.candidates[i].name}''' improved.`;
+                        }
+                    }
+                }
+            }
+            //Skills
+            for (let item of data.character.skills) {
+                if (item.unlockCond.phase == "PHASE_2") {
+                    e2upgradeSummary+=`\n*New skill: '''${data.charSkills[item.skillId].levels[0].name}'''.`
+                }
+            }
+            //Range
+            if (data.character.phases[2].rangeId != data.character.phases[1].rangeId) {
+                e2upgradeSummary+=`\n*Range extended.`;
+            }
+            e2upgradeSummary+=`\n*[[Operator Module]]s available.`
+            elite2['e2'] = e2upgradeSummary;
+            elite2['e2 level'] = data.character.phases[1].attributesKeyFrames[1].level;
+            switch (data.character.phases[2].attributesKeyFrames[1].level) {
+                case 70:
+                    elite2['e2 lmd'] = 60000;
+                    break;
+                case 80:
+                    elite2['e2 lmd'] = 120000;
+                    break;
+                case 90:
+                    elite2['e2 lmd'] = 180000;
+                    break;
+            }
+            for (let i = 0; i < data.character.phases[2].evolveCost.length; i++) {
+                elite2[`e2 m${i}`] = `${data.character.phases[2].evolveCost[i].id}, ${data.character.phases[2].evolveCost[i].count}`;
+            }
+            for (let key in elite2) statistics[key] = elite2[key];
+        }
 
 
-        return info;
+        const opdata = formatCell({
+            name: "Operator data",
+            content: statistics
+        });
+        wikitextList.push(opdata);
+
+
+
+
+
+
+
+        // Talents
+        wikitextList.push("\n==Talents==");
+        for (let talent of data.character.talents) {
+            const talentName = talent.candidates[0].name;
+            let itemList = { "PHASE_0": [], "PHASE_1": [], "PHASE_2": [] };
+            for (let item of talent) {
+                let isExisting = false;
+                for (let phase in itemList) {
+                    if (phase == item.unlockCondition.phase) {
+                        itemList[phase].push({
+                            condition: item.unlockCondition.phase,
+                            potential: item.requiredPotentialRank,
+                            description: item.description
+                        });
+                        isExisting = true;
+                    }
+                }
+                if (!isExisting) {
+                    itemList[item.unlockCondition.phase].push({
+                        condition: item.unlockCondition.phase,
+                        potential: item.requiredPotentialRank,
+                        description: item.description
+                    });
+                }
+            }
+            let moreThanTwoPot = false;
+            for (let key in itemList) {
+                if (itemList[key].length > 2) {
+                    moreThanTwoPot = true;
+                    break;
+                }
+            }
+
+            
+            if (moreThanTwoPot) {
+                let count = 1;
+                let talentString = '';
+                for (let phase in itemList) {
+                    if (itemList[phase].length == 0) continue;
+                    for (let item of itemList[phase]) {
+                        let cond = '';
+                        switch (item.condition) {
+                            case "PHASE_0":
+                                cond = "Base";
+                                break;
+                            case "PHASE_1":
+                                cond = "Elite 1";
+                                break;
+                            case "PHASE_2":
+                                cond = "Elite 2";
+                                break;
+                        }
+                        let talentCell = { name: talentName + " " + count };
+                        talentCell['cond1'] = cond;
+                        talentCell['desc1'] = item.description;
+                        if (item.potential != 0) {
+                            talentCell['pot1'] = item.potential;
+                        }
+                        if (count != 1) {
+                            talentCell['rpl'] = talentName + " " + (count - 1);
+                        }
+                        talentString+=(formatCell(talentCell) + "\n");
+                        count++;
+                    }
+                    wikitextList.push(talentString);
+                }
+            } else {
+                let talentObject = { name: talentName };
+                if (itemList[key].length == 2) {
+                    let count = 1;
+                    for (let key in itemList) {
+                        let cond = '';
+                        switch (itemList[key][0].condition) {
+                            case "PHASE_0":
+                                cond = "Base";
+                                break;
+                            case "PHASE_1":
+                                cond = "Elite 1";
+                                break;
+                            case "PHASE_2":
+                                cond = "Elite 2";
+                                break;
+                        }
+                        talentObject[`cond${count}`] = cond;
+                        talentObject[`desc${count}a`] = itemList[key][0].description;
+                        talentObject[`desc${count}b`] = itemList[key][1].description;
+                        talentObject['pot'] = itemList[key][1].potential;
+                        count++;
+                    }
+                } else {
+                    let count = 1;
+                    for (let key in itemList) {
+                        if (itemList[key].length == 0) continue;
+                        switch (itemList[key][0].condition) {
+                            case "PHASE_0":
+                                cond = "Base";
+                                break;
+                            case "PHASE_1":
+                                cond = "Elite 1";
+                                break;
+                            case "PHASE_2":
+                                cond = "Elite 2";
+                                break;
+                        }
+                        talentObject[`cond${count}`] = cond;
+                        talentObject[`desc${count}`] = itemList[key][0].description;
+                        count++;
+                    }
+                }
+                wikitextList.push(formatCell(talentObject));
+            }
+        }
+
+
+
+        // Skills
+
+
+        // Base Skills
+
+
+        //return wikitextList.join("\n");
     }
 
 
     /**
      * @param {string} 
      */
-    static op_gallery_skin () {
+    static op_gallery_skin (data, original, enname) {
         
     }
 
@@ -435,61 +864,82 @@ const parseCell = (wikitext) => {
     return cell;
 }
 
+const convertProfessionName = (name) => {
+    switch (name) {
+        case "PIONEER":
+            return "Vanguard";
+        case "WARRIOR":
+            return "Guard";
+        case "SNIPER":
+            return "Sniper";
+        case "CASTER":
+            return "Caster";
+        case "MEDIC":
+            return "Medic";
+        case "TANK":
+            return "Specialist";
+        case "SUPPORT":
+            return "Supporter";
+        case "SPECIAL":
+            return "Specialist";
+    }
+}
+
 const getRange = (rangeId) => {
     const range = {
-        "0-1": "{{Ranges|s}}\n",
-        "1-1": "{{Ranges|s|r}}\n",
-        "1-2": "{{Ranges|r|p}}\n{{Ranges|s|r}}\n{{Ranges|r|p}}\n",
-        "1-3": "{{Ranges|p|r}}\n{{Ranges|s|r}}\n{{Ranges|p|r}}\n",
-        "1-4": "{{Ranges|r|r}}\n{{Ranges|s|r}}\n{{Ranges|r|r}}\n",
-        "2-1": "{{Ranges|r|p|p}}\n{{Ranges|r|r|p}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|p}}\n{{Ranges|r|p|p}}\n",
-        "2-2": "{{Ranges|s|r|r}}\n",
-        "2-3": "{{Ranges|r|r|p}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|p}}\n",
-        "2-4": "{{Ranges|p|r|p}}\n{{Ranges|s|r|r}}\n{{Ranges|p|r|p}}\n",
-        "2-5": "{{Ranges|p|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|p|r|r}}\n",
-        "2-6": "{{Ranges|p|p|r}}\n{{Ranges|p|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|p|r|r}}\n{{Ranges|p|p|r}}\n",
-        "3-1": "{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}\n",
-        "3-2": "{{Ranges|s|r|r|r}}\n",
-        "3-3": "{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n",
-        "3-4": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}\n", // Identical with 3-15, but Lumen used 3-4 and Mostima skill used 3-15
-        "3-5": "{{Ranges|r|r|p}}\n{{Ranges|r|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|r}}\n{{Ranges|r|r|p}}\n",
-        "3-6": "{{Ranges|r|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|r}}\n",
-        "3-7": "{{Ranges|r|p|p|p}}\n{{Ranges|r|r|p|p}}\n{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}\n{{Ranges|r|r|p|p}}\n{{Ranges|r|p|p|p}}\n",
-        "3-8": "{{Ranges|r|r|r|r|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|p}}\n",
-        "3-9": "{{Ranges|r|r|r|p|p}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|p|p}}\n",
-        "3-10": "{{Ranges|r|r|r|r|r}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|r}}\n",
-        "3-12": "{{Ranges|r|r|p|p|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|p|p|p}}\n",
-        "3-13": "{{Ranges|p|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|p|r|r|p}}\n",
-        "3-14": "{{Ranges|p|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|p|r|r|r}}\n",
-        "3-15": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}\n",
-        "3-16": "{{Ranges|s|p|p|r}}\n",
-        "3-17": "{{Ranges|p|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|p|r|r|r}}\n",
-        "3-18": "{{Ranges|r|r|p|p}}\n{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}\n{{Ranges|r|r|p|p}}\n",
-        "3-19": "{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}\n",
-        "3-21": "{{Ranges|r|r|p|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|p|p}}\n",
-        "4-1": "{{Ranges|s|r|r|r|r}}\n",
-        "4-3": "{{Ranges|p|p|r|r|p}}\n{{Ranges|p|p|r|r|r}}\n{{Ranges|s|p|r|r|r}}\n{{Ranges|p|p|r|r|r}}\n{{Ranges|p|p|r|r|p}}\n",
-        "4-4": "{{Ranges|p|p|r|r|r}}\n{{Ranges|s|p|r|r|r}}\n{{Ranges|p|p|r|r|r}}\n",
-        "4-5": "{{Ranges|p|p|p|r|r}}\n{{Ranges|s|p|p|r|r}}\n{{Ranges|p|p|p|r|r}}\n",
-        "4-6": "{{Ranges|p|p|p|r|r|p}}\n{{Ranges|s|p|p|r|r|r}}\n{{Ranges|p|p|p|r|r|p}}\n",
-        "4-9": "{{Ranges|r|r|p|p|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|p|p|p}}\n",
-        "4-10": "{{Ranges|r|p|p|p|p}}\n{{Ranges|r|r|p|p|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|p|p|p}}\n{{Ranges|r|p|p|p|p}}\n",
-        "4-11": "{{Ranges|p|p|r|p|p}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|p|p|r|p|p}}\n",
-        "5-1": "{{Ranges|s|r|r|r|r|r}}\n",
-        "6-1": "{{Ranges|s|r|r|r|r|r|r}}\n",
-        "x-1": "{{Ranges|p|p|r|p|p}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|r|r|s|r|r}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|p|p|r|p|p}}\n",
-        "x-2": "{{Ranges|p|r|r|r|p}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|r|r|s|r|r}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|p|r|r|r|p}}\n",
-        "x-4": "{{Ranges|r|r|r}}\n{{Ranges|r|s|r}}\n{{Ranges|r|r|r}}\n",
-        "x-5": "{{Ranges|p|r|p}}\n{{Ranges|r|s|r}}\n{{Ranges|p|r|p}}\n",
-        "x-6": "{{Ranges|p|p|r|p|p}}\n{{Ranges|p|p|r|p|p}}\n{{Ranges|r|r|s|r|r}}\n{{Ranges|p|p|r|p|p}}\n{{Ranges|p|p|r|p|p}}\n",
-        "y-1": "{{Ranges|r|r|r|p}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|p}}\n",
-        "y-2": "{{Ranges|r|r|r|r}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|r}}\n",
-        "x-3": "{{Ranges|p|p|p|r|p|p|p}}\n{{Ranges|p|p|r|r|r|p|p}}\n{{Ranges|p|r|r|r|r|r|p}}\n{{Ranges|r|r|r|s|r|r|r}}\n{{Ranges|p|r|r|r|r|r|p}}\n{{Ranges|p|p|r|r|r|p|p}}\n{{Ranges|p|p|p|r|p|p|p}}\n",
-        "y-4": "{{Ranges|r|r|r|p|p}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|s|r|r|r}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|p|p}}\n",
-        "y-6": "{{Ranges|p|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|p|r|r|p}}\n",
-        "y-7": "{{Ranges|r|r|r|r|r}}\n{{Ranges|r|s|r|r|r}}\n{{Ranges|r|r|r|r|r}}\n",
-        "y-8": "{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|r|s|r|r|r}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|r|r|r|r|p}}\n",
-        "y-10": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}\n"
+        "0-1": "{{Ranges|s}}",
+        "1-1": "{{Ranges|s|r}}",
+        "1-2": "{{Ranges|r|p}}\n{{Ranges|s|r}}\n{{Ranges|r|p}}",
+        "1-3": "{{Ranges|p|r}}\n{{Ranges|s|r}}\n{{Ranges|p|r}}",
+        "1-4": "{{Ranges|r|r}}\n{{Ranges|s|r}}\n{{Ranges|r|r}}",
+        "2-1": "{{Ranges|r|p|p}}\n{{Ranges|r|r|p}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|p}}\n{{Ranges|r|p|p}}",
+        "2-2": "{{Ranges|s|r|r}}",
+        "2-3": "{{Ranges|r|r|p}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|p}}",
+        "2-4": "{{Ranges|p|r|p}}\n{{Ranges|s|r|r}}\n{{Ranges|p|r|p}}",
+        "2-5": "{{Ranges|p|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|p|r|r}}",
+        "2-6": "{{Ranges|p|p|r}}\n{{Ranges|p|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|p|r|r}}\n{{Ranges|p|p|r}}",
+        "3-1": "{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}",
+        "3-2": "{{Ranges|s|r|r|r}}",
+        "3-3": "{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}",
+        "3-4": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}", // Identical with 3-15, but Lumen used 3-4 and Mostima skill used 3-15
+        "3-5": "{{Ranges|r|r|p}}\n{{Ranges|r|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|r}}\n{{Ranges|r|r|p}}",
+        "3-6": "{{Ranges|r|r|r}}\n{{Ranges|s|r|r}}\n{{Ranges|r|r|r}}",
+        "3-7": "{{Ranges|r|p|p|p}}\n{{Ranges|r|r|p|p}}\n{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}\n{{Ranges|r|r|p|p}}\n{{Ranges|r|p|p|p}}",
+        "3-8": "{{Ranges|r|r|r|r|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|p}}",
+        "3-9": "{{Ranges|r|r|r|p|p}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|p|p}}",
+        "3-10": "{{Ranges|r|r|r|r|r}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|r|r|r}}",
+        "3-12": "{{Ranges|r|r|p|p|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|p|p|p}}",
+        "3-13": "{{Ranges|p|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|p|r|r|p}}",
+        "3-14": "{{Ranges|p|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|p|r|r|r}}",
+        "3-15": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}",
+        "3-16": "{{Ranges|s|p|p|r}}",
+        "3-17": "{{Ranges|p|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|p|r|r|r}}",
+        "3-18": "{{Ranges|r|r|p|p}}\n{{Ranges|r|r|r|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|p}}\n{{Ranges|r|r|p|p}}",
+        "3-19": "{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}\n{{Ranges|r|p|p|p}}",
+        "3-21": "{{Ranges|r|r|p|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|s|r|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|p|p}}",
+        "4-1": "{{Ranges|s|r|r|r|r}}",
+        "4-3": "{{Ranges|p|p|r|r|p}}\n{{Ranges|p|p|r|r|r}}\n{{Ranges|s|p|r|r|r}}\n{{Ranges|p|p|r|r|r}}\n{{Ranges|p|p|r|r|p}}",
+        "4-4": "{{Ranges|p|p|r|r|r}}\n{{Ranges|s|p|r|r|r}}\n{{Ranges|p|p|r|r|r}}",
+        "4-5": "{{Ranges|p|p|p|r|r}}\n{{Ranges|s|p|p|r|r}}\n{{Ranges|p|p|p|r|r}}",
+        "4-6": "{{Ranges|p|p|p|r|r|p}}\n{{Ranges|s|p|p|r|r|r}}\n{{Ranges|p|p|p|r|r|p}}",
+        "4-9": "{{Ranges|r|r|p|p|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|p|p|p}}",
+        "4-10": "{{Ranges|r|p|p|p|p}}\n{{Ranges|r|r|p|p|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|r|r|p|p|p}}\n{{Ranges|r|p|p|p|p}}",
+        "4-11": "{{Ranges|p|p|r|p|p}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|s|r|r|r|r}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|p|p|r|p|p}}",
+        "5-1": "{{Ranges|s|r|r|r|r|r}}",
+        "6-1": "{{Ranges|s|r|r|r|r|r|r}}",
+        "x-1": "{{Ranges|p|p|r|p|p}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|r|r|s|r|r}}\n{{Ranges|p|r|r|r|p}}\n{{Ranges|p|p|r|p|p}}",
+        "x-2": "{{Ranges|p|r|r|r|p}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|r|r|s|r|r}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|p|r|r|r|p}}",
+        "x-4": "{{Ranges|r|r|r}}\n{{Ranges|r|s|r}}\n{{Ranges|r|r|r}}",
+        "x-5": "{{Ranges|p|r|p}}\n{{Ranges|r|s|r}}\n{{Ranges|p|r|p}}",
+        "x-6": "{{Ranges|p|p|r|p|p}}\n{{Ranges|p|p|r|p|p}}\n{{Ranges|r|r|s|r|r}}\n{{Ranges|p|p|r|p|p}}\n{{Ranges|p|p|r|p|p}}",
+        "y-1": "{{Ranges|r|r|r|p}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|p}}",
+        "y-2": "{{Ranges|r|r|r|r}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|r}}",
+        "x-3": "{{Ranges|p|p|p|r|p|p|p}}\n{{Ranges|p|p|r|r|r|p|p}}\n{{Ranges|p|r|r|r|r|r|p}}\n{{Ranges|r|r|r|s|r|r|r}}\n{{Ranges|p|r|r|r|r|r|p}}\n{{Ranges|p|p|r|r|r|p|p}}\n{{Ranges|p|p|p|r|p|p|p}}",
+        "y-4": "{{Ranges|r|r|r|p|p}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|s|r|r|r}}\n{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|p|p}}",
+        "y-6": "{{Ranges|p|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|p|r|r|p}}",
+        "y-7": "{{Ranges|r|r|r|r|r}}\n{{Ranges|r|s|r|r|r}}\n{{Ranges|r|r|r|r|r}}",
+        "y-8": "{{Ranges|r|r|r|r|p}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|r|s|r|r|r}}\n{{Ranges|r|r|r|r|r}}\n{{Ranges|r|r|r|r|p}}",
+        "y-10": "{{Ranges|r|r|r|p}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|s|r|r}}\n{{Ranges|r|r|r|r}}\n{{Ranges|r|r|r|p}}"
     }
     return range[rangeId];
 }
@@ -497,8 +947,7 @@ const getRange = (rangeId) => {
 //only for test use
 
 async function test () {
-    console.log(getRange("3-6"));
+    template.op_main()
 }
-
 
 //test();
