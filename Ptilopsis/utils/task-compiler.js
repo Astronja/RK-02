@@ -22,9 +22,9 @@ export default async function compileTask (operator) {
 }
 
 async function start () {
-    await compileTask("Cairn");
-    await compileTask("Skybox");
-    await compileTask("Nasti");
+    await compileTask("Varkaris");
+    await compileTask("Perfumer the Distilled");
+    await compileTask("Titi");
 }
 
-//start();
+start();

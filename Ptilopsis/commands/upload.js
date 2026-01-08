@@ -13,28 +13,19 @@ export class Upload {
     }
 
     async execute () {
-        //await this.downloadOperatorData();
+        await this.downloadOperatorData();
         await this.updateProcess(this.interaction);
     }
 
     async downloadOperatorData () {
-        let data = await closure.getOperator("Akkord");
-        await source.writeOperatorData("Akkord", data);
+        let data = await closure.getOperator("Varkaris");
+        await source.writeOperatorData("Varkaris", data);
         await delay(3000);
-        data = await closure.getOperator("Hadiya");
-        await source.writeOperatorData("Hadiya", data);
+        data = await closure.getOperator("Perfumer the Distilled");
+        await source.writeOperatorData("Perfumer the Distilled", data);
         await delay(3000);
-        data = await closure.getOperator("Snow Hunter");
-        await source.writeOperatorData("Snow Hunter", data);
-        await delay(3000);
-        data = await closure.getOperator("Astgenne the Lightchaser");
-        await source.writeOperatorData("Astgenne the Lightchaser", data);
-        await delay(3000);
-        data = await closure.getOperator("Pramanix the Prerita");
-        await source.writeOperatorData("Pramanix the Prerita", data);
-        await delay(3000);
-        data = await closure.getOperator("SilverAsh the Reignfrost");
-        await source.writeOperatorData("SilverAsh the Reignfrost", data);
+        data = await closure.getOperator("Titi");
+        await source.writeOperatorData("Titi", data);
     }
 
     async getTasks () {
