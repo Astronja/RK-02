@@ -97,7 +97,7 @@ export default class template {
         });
 
         
-
+        
         wikitextList.push(opinfo);
         const optab = "{{Operator tab}}";
         wikitextList.push(optab);
@@ -105,7 +105,7 @@ export default class template {
         wikitextList.push(opnotice);
 
         
-
+        //Info box
         const opinfobox = formatCell({
             name: "Operator infobox",
             content: {
@@ -277,10 +277,10 @@ export default class template {
                 originium: ""
             }
         });
-
-        
-
         wikitextList.push(opinfobox);
+
+
+        //Summary
         const opsummary = "'''Snegurochka''' is a [[4-star|4★]] [[Ursus|Ursine]] [[Agent Vanguard]] [[Operator]] in ''[[Arknights]]'', introduced in [[Abnormal Spectrum]]."
         // const summary = '''{{subst:#titleparts:{{subst:PAGENAME}}}}''' is a [[-star|★]] [[]] [[]] [[Operator]] in ''[[Arknights]]'', introduced in [[]].
         // ⬆️ this is the one provided in the boiler template.
@@ -288,10 +288,12 @@ export default class template {
         
         
 
+
+
         //Statistics
         wikitextList.push("\n==Stats==");
         // This is to shown segments of statistics cell, created for convenience.
-        /* THIS IS NOT HOW `statistics` is "structured" in terms of programming, the more important is the sequence shown!
+        /* THIS IS NOT HOW `statistics` is "structured" programmatically, the more important is the sequence shown!
         let statistics = {
             RANGE: {},
             HAD: {},
@@ -691,7 +693,25 @@ export default class template {
 
 
         // Skills
+        wikitextList.push("\n==Skills==");
+        for (let sk of data.character.skills) {
+            const skill = data.charSkills[sk.skillId];
+            wikitextList.push(formatCell({
+                name: "Skill head",
+                content: {
+                    name: skill.levels[0].name,
+                    icon: annotate(skill.skillId),
+                    sp: skillRecoveryType(skill.levels[0].spData.spType),
+                    type: skillActiveType(skill.levels[0].skillType),
+                }
+            }));
+            for (let level of skill) {
 
+            }
+        }
+        
+
+        // Modules
 
         // Base Skills
 
@@ -883,6 +903,50 @@ const convertProfessionName = (name) => {
         case "SPECIAL":
             return "Specialist";
     }
+}
+
+const skillRecoveryType = (sp) => {
+    switch (sp) {
+        case "INCREASE_WITH_TIME":
+            return "auto";
+        case "INCREASE_WITH_ATTACK":
+            return "attack";
+        case "INCREASE_WITH_DAMAGE":
+            return "damage";
+        default:
+            return annotate("unknown");
+    }
+}
+
+const skillActiveType = (id) => {
+    switch (id) {
+        case "MANUAL":
+            return "manual";
+        case "AUTO":
+            return "auto";
+        case "PASSIVE":
+            return "passive";
+        default:
+            return annotate("unknown");
+    }
+}
+
+const skillDesc = (string) => {
+    let result = '';
+    const strings = string.split("</>");
+    for (let item of strings) {
+        if (item.includes("<")) {
+        }
+    }
+}
+
+const skillDescTags = [
+    "<@ba.kw>",
+    "<@ba.em>"
+]
+
+const annotate = (content) => {
+    return `<!-- ${content} -->`;
 }
 
 const getRange = (rangeId) => {
