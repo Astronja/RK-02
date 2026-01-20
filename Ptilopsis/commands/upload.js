@@ -18,13 +18,13 @@ export class Upload {
     }
 
     async downloadOperatorData () {
-        let data = await closure.getOperator("Varkaris");
+        let data = await closure.getOperatorData("Varkaris");
         await source.writeOperatorData("Varkaris", data);
         await delay(3000);
-        data = await closure.getOperator("Perfumer the Distilled");
+        data = await closure.getOperatorData("Perfumer-the-Distilled");
         await source.writeOperatorData("Perfumer the Distilled", data);
         await delay(3000);
-        data = await closure.getOperator("Titi");
+        data = await closure.getOperatorData("Titi");
         await source.writeOperatorData("Titi", data);
     }
 
