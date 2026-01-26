@@ -705,7 +705,7 @@ export default class template {
                     type: skillActiveType(skill.levels[0].skillType),
                 }
             }));
-            for (let level of skill) {
+            for (let level of skill.levels) {
 
             }
         }
@@ -942,7 +942,9 @@ const skillDesc = (string) => {
 
 const skillDescTags = [
     "<@ba.kw>",
-    "<@ba.em>"
+    "<@ba.rem>",
+    "<@ba.vup>",
+    "<@ba.vdown>"
 ]
 
 const annotate = (content) => {
